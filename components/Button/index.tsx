@@ -1,19 +1,13 @@
 import { Link } from "expo-router";
 import { type ComponentProps } from 'react';
-import { Button, Pressable, StyleSheet, Text } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-export { LinkButton, MainButton, SecondaryButton };
+export { MainButton, SecondaryButton };
 
 const MainButton = ({ title, onPress }: ButtonProps) => (
-  <Pressable style={styles.appButton} onPress={onPress}>
+  <TouchableOpacity style={styles.appButton} onPress={onPress}>
     <Text style={styles.appButtonText}>{title}</Text>
-  </Pressable>
-);
-
-const LinkButton = ({ href, title }: LinkProps) => (
-  <Link href={href} style={styles.link}>
-    <Text style={styles.linkText}>{title}</Text>
-  </Link>
+  </TouchableOpacity>
 );
 
 const SecondaryButton = ({ title, onPress }: ButtonProps) => (
@@ -31,10 +25,10 @@ type LinkProps = ComponentProps<typeof Link> & {
 
 const styles = StyleSheet.create({
   appButton: {
-    marginTop: 12,
+    marginTop: 15,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#00000085',
     borderRadius: 8,
     alignSelf: 'flex-start',
   },
@@ -42,14 +36,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     textAlign: 'center',
-  },
-  link: {
-    marginTop: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    alignSelf: 'flex-start',
   },
   linkText: {
     color: '#fff',

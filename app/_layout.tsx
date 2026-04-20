@@ -3,6 +3,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -39,25 +40,27 @@ export default function RootLayout() {
   };
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <View style={{ flex: 1 }}>
+    <PaperProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <View style={{ flex: 1 }}>
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="explore" options={{ headerShown: false }} />
-            <Stack.Screen name="catalogue" options={{ headerShown: false }} />
-          </Stack>
-        </View>
+          <View style={{ flex: 1 }}>
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="explore" options={{ headerShown: false }} />
+              <Stack.Screen name="catalogue" options={{ headerShown: false }} />
+            </Stack>
+          </View>
 
-        <NavigationBar
-          routes={bottomRoutes}
-          index={activeIndex === -1 ? 0 : activeIndex}
-          onIndexChange={handleIndexChange}
-          renderScene={() => null}
-          sceneAnimationEnabled={false}
-        />
-      </View>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+          <NavigationBar
+            routes={bottomRoutes}
+            index={activeIndex === -1 ? 0 : activeIndex}
+            onIndexChange={handleIndexChange}
+            renderScene={() => null}
+            sceneAnimationEnabled={false}
+          />
+        </View>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </PaperProvider>
   );
 }

@@ -1,24 +1,40 @@
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ReactNode } from 'react';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 
 type AppModalProps = {
   visible: boolean;
   title?: string;
   message?: string;
   onClose: () => void;
+  children?: ReactNode;
 };
 
-export default function AppModal({ visible, title = 'Modal', message, onClose }: AppModalProps) {
+export default function AppModal({
+  visible,
+  title,
+  message,
+  onClose,
+  children,
+}: AppModalProps) {
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.backdrop}>
-        <View style={styles.container}>
-          <Text style={styles.title}>{title}</Text>
-          {message ? <Text style={styles.message}>{message}</Text> : null}
-          <Pressable style={styles.button} onPress={onClose}>
-            <Text style={styles.buttonText}>Close</Text>
-          </Pressable>
+    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.backdrop}>
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View style={styles.container}>
+              {title ? <Text style={styles.title}>{title}</Text> : null}
+              {message ? <Text style={styles.message}>{message}</Text> : null}
+              {children}
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
@@ -26,7 +42,7 @@ export default function AppModal({ visible, title = 'Modal', message, onClose }:
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    backgroundColor: 'rgba(0, 0, 0, 0.63)',
     justifyContent: 'center',
     alignItems: 'center',
   },

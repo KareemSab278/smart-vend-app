@@ -1,20 +1,21 @@
-export { CatalogueItemData, fetchCatalogueData };
-
-type CatalogueItemData = {
+export type CatalogueItemData = {
   id: string | number;
   name: string;
   description: string;
   price: number;
   image?: string;
-  peanut_allergy?: boolean;
-  gluten_allergy?: boolean;
-  dairy_allergy?: boolean;
+  peanut_free?: boolean;
+  gluten_free?: boolean;
+  dairy_free?: boolean;
   kosher?: boolean;
   halal?: boolean;
   vegan?: boolean;
   vegetarian?: boolean;
+  type?: 'drink' | 'snack' | 'other' | 'food' | 'sandwich' | 'dessert' | string;
   [key: string]: unknown;
 };
+
+export { fetchCatalogueData };
 
 const fetchCatalogueData = async (): Promise<CatalogueItemData[]> => {
   // Simulate an API call with a delay
@@ -31,8 +32,12 @@ const catalogueData: CatalogueItemData[] = [
     image: 'https://images.unsplash.com/photo-1598514983337-fd15ae363736?auto=format&fit=crop&w=800&q=80',
     vegan: true,
     vegetarian: true,
+    gluten_free: true,
+    dairy_free: true,
+    peanut_free: true,
     kosher: true,
     halal: true,
+    type: 'drink',
   },
   {
     id: 2,
@@ -42,6 +47,12 @@ const catalogueData: CatalogueItemData[] = [
     image: 'https://images.unsplash.com/photo-1585386959984-a415522a55f1?auto=format&fit=crop&w=800&q=80',
     vegan: true,
     vegetarian: true,
+    gluten_free: true,
+    dairy_free: true,
+    peanut_free: true,
+    kosher: true,
+    halal: true,
+    type: 'drink',
   },
   {
     id: 3,
@@ -51,6 +62,12 @@ const catalogueData: CatalogueItemData[] = [
     image: 'https://images.unsplash.com/photo-1568642702658-f313e9c98d1d?auto=format&fit=crop&w=800&q=80',
     vegan: true,
     vegetarian: true,
+    gluten_free: true,
+    dairy_free: true,
+    peanut_free: true,
+    kosher: true,
+    halal: true,
+    type: 'drink',
   },
   {
     id: 4,
@@ -60,7 +77,12 @@ const catalogueData: CatalogueItemData[] = [
     image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80',
     vegan: true,
     vegetarian: true,
+    gluten_free: true,
+    dairy_free: true,
+    peanut_free: true,
+    kosher: true,
     halal: true,
+    type: 'drink',
   },
   {
     id: 5,
@@ -69,7 +91,12 @@ const catalogueData: CatalogueItemData[] = [
     price: 2.4,
     image: 'https://images.unsplash.com/photo-1572373129673-93a7f6751d85?auto=format&fit=crop&w=800&q=80',
     vegetarian: true,
-    dairy_allergy: false,
+    dairy_free: false,
+    gluten_free: true,
+    peanut_free: false,
+    kosher: true,
+    halal: true,
+    type: 'drink',
   },
   {
     id: 6,
@@ -79,7 +106,11 @@ const catalogueData: CatalogueItemData[] = [
     image: 'https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=800&q=80',
     vegan: true,
     vegetarian: true,
+    gluten_free: true,
+    dairy_free: true,
+    peanut_free: true,
     kosher: true,
     halal: true,
+    type: 'drink',
   },
 ];
