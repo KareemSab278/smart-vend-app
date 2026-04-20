@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Checkbox, ProgressBar } from 'react-native-paper';
 import { MainButton } from '@/components/Button';
 import { InputField } from '@/components/InputField';
+import { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { Checkbox, ProgressBar } from 'react-native-paper';
+import { RegisterStyles } from './Styles';
 
 type RegisterFormProps = {
   onSwitchToLogin: () => void;
@@ -62,9 +63,9 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
   };
 
   return (
-    <View style={styles.formContainer}>
-      <View style={styles.nameRow}>
-        <View style={styles.nameField}>
+    <View style={RegisterStyles.formContainer}>
+      <View style={RegisterStyles.nameRow}>
+        <View style={RegisterStyles.nameField}>
           <InputField
             label="First name"
             value={firstName}
@@ -73,7 +74,7 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
             autoCapitalize="words"
           />
         </View>
-        <View style={styles.nameField}>
+        <View style={RegisterStyles.nameField}>
           <InputField
             label="Last name"
             value={lastName}
@@ -106,98 +107,26 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
         helperText="Re-enter your password."
       />
       <TouchableOpacity
-        style={styles.checkboxRow}
+        style={RegisterStyles.checkboxRow}
         onPress={() => setSubscribe((previous) => !previous)}
       >
         <Checkbox status={subscribe ? 'checked' : 'unchecked'} />
-        <Text style={styles.checkboxText}>Subscribe to newsletter</Text>
+        <Text style={RegisterStyles.checkboxText}>Subscribe to newsletter</Text>
       </TouchableOpacity>
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? <Text style={RegisterStyles.errorText}>{error}</Text> : null}
       <MainButton title={loading ? 'Creating account…' : 'Sign up'} onPress={handleRegister} />
-      {loading ? <ProgressBar indeterminate color="#7c3aed" style={styles.progress} /> : null}
-      <TouchableOpacity onPress={onSwitchToLogin} style={styles.switchRow}>
-        <Text style={styles.switchText}>Already have an account?</Text>
-        <Text style={styles.switchAction}> Sign in</Text>
+      {loading ? <ProgressBar indeterminate color="#7c3aed" style={RegisterStyles.progress} /> : null}
+      <TouchableOpacity onPress={onSwitchToLogin} style={RegisterStyles.switchRow}>
+        <Text style={RegisterStyles.switchText}>Already have an account?</Text>
+        <Text style={RegisterStyles.switchAction}> Sign in</Text>
       </TouchableOpacity>
-      <View style={styles.googleSection}>
-        <Text style={styles.googleText}>Or sign up with</Text>
-        <TouchableOpacity style={styles.googleButton} onPress={() => setError('Google sign up is not available yet.')}> 
-          <Text style={styles.googleButtonText}>Google</Text>
+      <View style={RegisterStyles.googleSection}>
+        <Text style={RegisterStyles.googleText}>Or sign up with</Text>
+        <TouchableOpacity style={RegisterStyles.googleButton} onPress={() => setError('Google sign up is not available yet.')}> 
+          <Text style={RegisterStyles.googleButtonText}>Google</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  formContainer: {
-    width: '100%',
-    marginTop: 16,
-  },
-  nameRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  nameField: {
-    flex: 1,
-  },
-  checkboxRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginTop: 8,
-    marginBottom: 12,
-  },
-  checkboxText: {
-    fontSize: 14,
-    color: '#444',
-  },
-  errorText: {
-    color: '#d32f2f',
-    marginBottom: 12,
-    fontSize: 14,
-  },
-  progress: {
-    marginTop: 12,
-    height: 4,
-    borderRadius: 4,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  switchText: {
-    color: '#444',
-    fontSize: 14,
-  },
-  switchAction: {
-    color: '#481186bd',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  googleSection: {
-    marginTop: 24,
-    alignItems: 'center',
-  },
-  googleText: {
-    color: '#666',
-    marginBottom: 10,
-    fontSize: 14,
-  },
-  googleButton: {
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#d7d3ea',
-    minWidth: 160,
-  },
-  googleButtonText: {
-    color: '#481186bd',
-    fontSize: 15,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-});

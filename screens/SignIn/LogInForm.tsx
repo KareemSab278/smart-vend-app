@@ -1,8 +1,8 @@
 import { MainButton } from '@/components/Button';
 import { InputField } from '@/components/InputField';
 import { useState } from 'react';
-import { ActivityIndicator, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
+import { ActivityIndicator, Linking, Text, TouchableOpacity, View } from 'react-native';
+import { LogInStyles } from './Styles';
 type LogInFormProps = {
   onSwitchToRegister: () => void;
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -36,7 +36,7 @@ export function LogInForm({ onSwitchToRegister, onSubmit }: LogInFormProps) {
   };
 
   return (
-    <View style={styles.formContainer}>
+    <View style={LogInStyles.formContainer}>
       <InputField
         label="Email"
         value={email}
@@ -52,12 +52,12 @@ export function LogInForm({ onSwitchToRegister, onSubmit }: LogInFormProps) {
         secureTextEntry
         helperText="Use at least 8 characters."
       />
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? <Text style={LogInStyles.errorText}>{error}</Text> : null}
       <MainButton title={loading ? 'Signing in…' : 'Sign in'} onPress={handleLogin} />
-      {loading ? <ActivityIndicator style={styles.spinner} color="#481186bd" /> : null}
-      <TouchableOpacity onPress={onSwitchToRegister} style={styles.switchRow}>
-        <Text style={styles.switchText}>Don't have an account?</Text>
-        <Text style={styles.switchAction}> Create one</Text>
+      {loading ? <ActivityIndicator style={LogInStyles.spinner} color="#481186bd" /> : null}
+      <TouchableOpacity onPress={onSwitchToRegister} style={LogInStyles.switchRow}>
+        <Text style={LogInStyles.switchText}>Don't have an account?</Text>
+        <Text style={LogInStyles.switchAction}> Create one</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
@@ -67,44 +67,9 @@ export function LogInForm({ onSwitchToRegister, onSubmit }: LogInFormProps) {
           });
         }}
       >
-        <Text style={styles.forgotPassword}>Forgot password?</Text>
+        <Text style={LogInStyles.forgotPassword}>Forgot password?</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  formContainer: {
-    width: '100%',
-    marginTop: 16,
-  },
-  errorText: {
-    color: '#d32f2f',
-    marginBottom: 12,
-    fontSize: 14,
-  },
-  spinner: {
-    marginTop: 12,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-    flexWrap: 'wrap',
-  },
-  switchText: {
-    color: '#444',
-    fontSize: 14,
-  },
-  switchAction: {
-    color: '#481186bd',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  forgotPassword: {
-    marginTop: 12,
-    color: '#7c3aed',
-    fontSize: 14,
-    textDecorationLine: 'underline',
-  },
-});

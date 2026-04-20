@@ -1,10 +1,12 @@
 import { FiltersButton } from '@/components/Button';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
 import { CatalogueItemData, fetchCatalogueData } from '@/helpers/getCatalogueItemData';
+import { CartStorage } from '@/store/Storage';
 import { useEffect, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import CatalogueItem from '../../components/CatalogueItem';
 import { CatalogueFilterModal } from './CatalogueFilterModal';
+import { styles } from './Styles';
 
 const categoryOptions = [
   { label: 'All', value: 'all' },
@@ -22,6 +24,18 @@ const dietaryOptions = [
   { label: 'Halal', value: 'halal' },
   { label: 'Vegan', value: 'vegan' },
 ];
+
+const handleItemSelect = async (item: CatalogueItemData) => {
+  const cartItem = {
+    id: item.id,
+    name: item.name,
+    price: item.price,
+    quantity: 1,
+  };
+  await CartStorage.addToCart(cartItem);
+  console.log('Added to cart:', cartItem);
+  console.log('Current cart:', await CartStorage.getCart());
+};
 
 export default function CatalogueScreen() {
   const [catalogueData, setCatalogueData] = useState<CatalogueItemData[]>([]);
@@ -44,7 +58,7 @@ export default function CatalogueScreen() {
       await fetchCatalogueData().then(
         (data) => { data ? setCatalogueData(data as CatalogueItemData[]) : setError(true); }
       );
-    } catch (err) { 
+    } catch (err) {
       console.error('Error fetching catalogue data:', err);
       setError(true);
     }
@@ -99,7 +113,7 @@ export default function CatalogueScreen() {
               renderItem={({ item }) => (
                 <CatalogueItem
                   item={item}
-                  onPress={() => console.log('Selected', item.name)}
+                  onPress={() => handleItemSelect(item)}
                 />
               )}
               numColumns={2}
@@ -115,79 +129,3 @@ export default function CatalogueScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  title: {
-    paddingTop: 24,
-    paddingHorizontal: 24,
-    marginBottom: 12,
-    fontSize: 32,
-    fontWeight: '700',
-  },
-  headerWithButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-  },
-  filters: {
-    paddingHorizontal: 24,
-    paddingBottom: 8,
-  },
-  filterTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 10,
-  },
-  scrollGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: 12,
-  },
-  filterButton: {
-    marginTop: 16,
-  },
-  modalContainer: {
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 20,
-    elevation: 8,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 18,
-  },
-  filterItem: {
-    marginRight: 8,
-  },
-  toggleItem: {
-    marginRight: 12,
-    minWidth: 150,
-  },
-  applyButton: {
-    marginTop: 18,
-  },
-  emptyText: {
-    paddingHorizontal: 24,
-    marginTop: 18,
-    fontSize: 16,
-    color: '#666',
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    paddingVertical: 12,
-    flexGrow: 1,
-  },
-  columnWrapper: {
-    justifyContent: 'space-between',
-  },
-});

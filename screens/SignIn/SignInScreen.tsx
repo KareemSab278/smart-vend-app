@@ -3,13 +3,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { LogInForm } from './LogInForm';
 import { RegisterForm } from './RegisterForm';
+import { SignInStyles } from './Styles';
 
 export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 'login' | 'register' }) {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
@@ -32,35 +32,35 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
 
   return (
     <KeyboardAvoidingView
-      style={styles.screen}
+      style={SignInStyles.screen}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <View style={styles.header}>
-          <Text style={styles.title}>{mode === 'login' ? 'Welcome back' : 'Create your account'}</Text>
-          <Text style={styles.subtitle}>
+      <ScrollView contentContainerStyle={SignInStyles.container} keyboardShouldPersistTaps="handled">
+        <View style={SignInStyles.header}>
+          <Text style={SignInStyles.title}>{mode === 'login' ? 'Welcome back' : 'Create your account'}</Text>
+          <Text style={SignInStyles.subtitle}>
             {mode === 'login'
               ? 'Sign in to access your vending dashboard and orders.'
               : 'Register for your account and start browsing the catalogue today.'}
           </Text>
         </View>
 
-        <View style={styles.switchButtons}>
+        <View style={SignInStyles.switchButtons}>
           <TouchableOpacity
-            style={[styles.switchTab, mode === 'login' && styles.switchTabActive]}
+            style={[SignInStyles.switchTab, mode === 'login' && SignInStyles.switchTabActive]}
             onPress={() => setMode('login')}
           >
-            <Text style={[styles.switchTabText, mode === 'login' && styles.switchTabTextActive]}>Login</Text>
+            <Text style={[SignInStyles.switchTabText, mode === 'login' && SignInStyles.switchTabTextActive]}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.switchTab, mode === 'register' && styles.switchTabActive]}
+            style={[SignInStyles.switchTab, mode === 'register' && SignInStyles.switchTabActive]}
             onPress={() => setMode('register')}
           >
-            <Text style={[styles.switchTabText, mode === 'register' && styles.switchTabTextActive]}>Sign up</Text>
+            <Text style={[SignInStyles.switchTabText, mode === 'register' && SignInStyles.switchTabTextActive]}>Sign up</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.card}>
+        <View style={SignInStyles.card}>
           {mode === 'login' ? (
             <LogInForm
               onSwitchToRegister={() => setMode('register')}
@@ -71,73 +71,10 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
           )}
         </View>
 
-        {statusMessage ? <Text style={styles.statusMessage}>{statusMessage}</Text> : null}
+        {statusMessage ? <Text style={SignInStyles.statusMessage}>{statusMessage}</Text> : null}
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  container: {
-    padding: 24,
-    paddingTop: 32,
-  },
-  header: {
-    gap: 10,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#1a1a1a',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#555',
-    lineHeight: 22,
-  },
-  switchButtons: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 20,
-  },
-  switchTab: {
-    flex: 1,
-    backgroundColor: '#f4efff',
-    borderRadius: 14,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  switchTabActive: {
-    backgroundColor: '#481186bd',
-  },
-  switchTabText: {
-    color: '#5d5d5d',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  switchTabTextActive: {
-    color: '#fff',
-  },
-  card: {
-    backgroundColor: '#faf7ff',
-    borderRadius: 24,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: '#ece8f7',
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 16,
-    elevation: 5,
-  },
-  statusMessage: {
-    marginTop: 18,
-    fontSize: 14,
-    color: '#444',
-    textAlign: 'center',
-  },
-});
+

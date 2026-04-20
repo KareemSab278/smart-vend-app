@@ -74,6 +74,63 @@ const Storage = {
             console.error('Error clearing all data:', e);
         }
     },
+
+
 };
 
-export { Storage };
+const UserStorage = {
+    saveUser: async (user: any) => {
+        try {
+            await Storage.saveObjToKey('user', user);
+        } catch (e) {
+            console.error('Error saving user:', e);
+        }
+    },
+
+    getUser: async () => {
+        try {
+            return await Storage.getObjFromKey('user');
+        } catch (e) {
+            console.error('Error retrieving user:', e);
+        }
+    },
+
+    clearUser: async () => { // for sign out
+        try {
+            await Storage.removeDataFromKey('user');
+        } catch (e) {
+            console.error('Error clearing user:', e);
+        }
+    }
+}
+
+const CartStorage = {
+    addToCart: async (item: any) => {
+        try {
+            const cart = await Storage.getObjFromKey('cart') || [];
+            cart.push(item);
+            await Storage.saveObjToKey('cart', cart);
+        } catch (e) {
+            console.error('Error adding item to cart:', e);
+        }
+    },
+
+    getCart: async () => {
+        try {
+            return await Storage.getObjFromKey('cart') || [];
+        } catch (e) {
+            console.error('Error retrieving cart:', e);
+        }
+    },
+
+    clearCart: async () => {
+        try {
+            await Storage.removeDataFromKey('cart');
+        } catch (e) {
+            console.error('Error clearing cart:', e);
+        }
+    }
+}
+
+export { CartStorage, Storage, UserStorage };
+
