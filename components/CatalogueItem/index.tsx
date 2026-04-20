@@ -1,8 +1,9 @@
 import React from 'react';
 import { ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native';
-import { Button, Card, Chip } from 'react-native-paper';
+import { Card, Chip } from 'react-native-paper';
 
 import { CatalogueItemData } from '@/helpers/getCatalogueItemData';
+import { MainButton } from '../Button';
 
 type CatalogueItemProps = {
   item: CatalogueItemData;
@@ -30,7 +31,7 @@ export default function CatalogueItem({ item, onPress, style }: CatalogueItemPro
           <Text style={styles.price}>£{item.price.toFixed(2)}</Text>
         </View>
 
-        <Text numberOfLines={3} style={styles.description}>
+        <Text numberOfLines={2} style={styles.description}>
           {item.description}
         </Text>
 
@@ -50,7 +51,7 @@ export default function CatalogueItem({ item, onPress, style }: CatalogueItemPro
       </Card.Content>
 
       <Card.Actions style={styles.actions}>
-        <Button onPress={onPress}>Select</Button>
+        <MainButton onPress={onPress} title="Select" />
       </Card.Actions>
     </Card>
   );
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 4,
     marginRight: 8,
     marginTop: 4,
@@ -93,6 +94,8 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   actions: {
+    width: '100%',
     justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 });

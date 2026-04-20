@@ -1,12 +1,19 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
 import { type ComponentProps } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-export { MainButton, SecondaryButton };
+export { FiltersButton, MainButton, SecondaryButton };
 
 const MainButton = ({ title, onPress }: ButtonProps) => (
   <TouchableOpacity style={styles.appButton} onPress={onPress}>
     <Text style={styles.appButtonText}>{title}</Text>
+  </TouchableOpacity>
+);
+
+const FiltersButton = ({ onPress }: { onPress?: () => void }) => (
+  <TouchableOpacity style={styles.filtersButton} onPress={onPress}>
+    <MaterialCommunityIcons name="filter-variant" size={20} color="#fff"/>
   </TouchableOpacity>
 );
 
@@ -16,7 +23,7 @@ const SecondaryButton = ({ title, onPress }: ButtonProps) => (
 
 interface ButtonProps {
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 type LinkProps = ComponentProps<typeof Link> & {
@@ -28,9 +35,19 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#00000085',
+    backgroundColor: '#481186bd',
     borderRadius: 8,
     alignSelf: 'flex-start',
+  },
+  filtersButton: {
+    marginTop: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#481186bd',
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   appButtonText: {
     color: '#fff',

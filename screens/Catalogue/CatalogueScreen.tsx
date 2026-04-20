@@ -1,4 +1,4 @@
-import { MainButton } from '@/components/Button';
+import { FiltersButton } from '@/components/Button';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
 import { CatalogueItemData, fetchCatalogueData } from '@/helpers/getCatalogueItemData';
 import { useEffect, useMemo, useState } from 'react';
@@ -72,7 +72,7 @@ export default function CatalogueScreen() {
     <View style={styles.container}>
       <View style={styles.headerWithButton}>
         <Text style={styles.title}>Catalogue</Text>
-        <MainButton title="Filters" onPress={() => setFilterOpen(true)} style={styles.filterButton} />
+        <FiltersButton onPress={() => setFilterOpen(true)} />
       </View>
 
       <CatalogueFilterModal
