@@ -1,34 +1,16 @@
-import { AppButton, LinkButton } from '@/components/Button';
-import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Welcome!</Text>
-        <Text style={styles.subtitle}>A cleaner starter screen for your app.</Text>
+        <Text style={styles.text}>This is the main page</Text>
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Navigation</Text>
-        <LinkButton
-          href="/explore"
-          title='Explore'
-        />
-        <AppButton
-          title="I do nothing"
-          onPress={() => console.log('Button pressed')}
-        />
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Project structure</Text>
-        <Text style={styles.text}>Screens live in the screens/ folder. Components can be added later in components/.</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.text}>
-          Developer tools: {Platform.select({ ios: 'cmd + d', android: 'cmd + m', web: 'F12' })}
-        </Text>
+        <Text style={styles.subtitle}>LinkButton Component</Text>
       </View>
     </ScrollView>
   );
@@ -38,6 +20,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     backgroundColor: '#fff',
+    height: '100%',
   },
   header: {
     gap: 8,
@@ -66,14 +49,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   text: {
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 24,
     color: '#333',
   },
-  code: {
-    fontFamily: Platform.OS === 'web' ? 'monospace' : 'Courier',
-    backgroundColor: '#f2f2f2',
-    padding: 4,
-  },
-
 });

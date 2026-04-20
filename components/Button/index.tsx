@@ -2,9 +2,9 @@ import { Link } from "expo-router";
 import { type ComponentProps } from 'react';
 import { Button, Pressable, StyleSheet, Text } from "react-native";
 
-export { AppButton, LinkButton, SecondaryButton };
+export { LinkButton, MainButton, SecondaryButton };
 
-const AppButton = ({ title, onPress }: ButtonProps) => (
+const MainButton = ({ title, onPress }: ButtonProps) => (
   <Pressable style={styles.appButton} onPress={onPress}>
     <Text style={styles.appButtonText}>{title}</Text>
   </Pressable>
