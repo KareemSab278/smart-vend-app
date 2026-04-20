@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { LinkButton } from '@/components/Button';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function ExploreScreen() {
@@ -16,9 +16,7 @@ export default function ExploreScreen() {
         <Text style={styles.sectionTitle}>Next steps</Text>
         <Text style={styles.text}>Build out new screens in their own folders with local styles and docs.</Text>
       </View>
-      <Link href="/" style={styles.link}>
-        <Text style={styles.linkText}>Back to home</Text>
-      </Link>
+      <LinkButton href="/" title="Back to Home" />
     </ScrollView>
   );
 }
@@ -52,17 +50,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: '#333',
-  },
-  link: {
-    marginTop: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    alignSelf: 'flex-start',
-  },
-  linkText: {
-    color: '#fff',
-    fontWeight: '600',
   },
 });

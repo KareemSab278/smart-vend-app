@@ -1,5 +1,5 @@
-import { Link } from 'expo-router';
-import { Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AppButton, LinkButton } from '@/components/Button';
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
@@ -8,21 +8,19 @@ export default function HomeScreen() {
         <Text style={styles.title}>Welcome!</Text>
         <Text style={styles.subtitle}>A cleaner starter screen for your app.</Text>
       </View>
-      <Image
-        style={styles.image}
-      />
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Get started</Text>
-        <Text style={styles.text}>
-          Open <Text style={styles.code}>screens/home/HomeScreen.tsx</Text> and edit this screen.
-        </Text>
-      </View>
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Navigation</Text>
-        <Link href="/explore" style={styles.link}>
-          <Text style={styles.linkText}>Go to Explore</Text>
-        </Link>
+        <LinkButton
+          href="/explore"
+          title='Explore'
+        />
+        <AppButton
+          title="I do nothing"
+          onPress={() => console.log('Button pressed')}
+        />
       </View>
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Project structure</Text>
         <Text style={styles.text}>Screens live in the screens/ folder. Components can be added later in components/.</Text>
@@ -77,15 +75,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     padding: 4,
   },
-  link: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    marginTop: 8,
-  },
-  linkText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
+
 });
