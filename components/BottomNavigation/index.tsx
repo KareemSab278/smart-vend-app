@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { View } from 'react-native';
 import type { BottomNavigationProps, BottomNavigationRoute } from 'react-native-paper';
 import { BottomNavigation } from 'react-native-paper';
 
@@ -37,13 +38,24 @@ const BottomNavigationBar = <Route extends BottomNavRoute = BottomNavRoute>({
   );
 
   return (
-    <BottomNavigation
-      navigationState={{ index: activeIndex, routes }}
-      onIndexChange={handleIndexChange}
-      renderScene={renderScene}
-      {...rest}
-    />
+    <View style={styles.container}>
+
+      <BottomNavigation
+        navigationState={{ index: activeIndex, routes }}
+        onIndexChange={handleIndexChange}
+        renderScene={renderScene}
+        {...rest}
+      />
+      
+    </View>
   );
+};
+
+const styles = {
+  container: {
+    backgroundColor: '#fff',
+    maxHeight: 100
+  },
 };
 
 export default BottomNavigationBar;

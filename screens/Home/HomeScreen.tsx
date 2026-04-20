@@ -7,11 +7,6 @@ export default function HomeScreen() {
         <Text style={styles.title}>Welcome!</Text>
         <Text style={styles.text}>This is the main page</Text>
       </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Navigation</Text>
-        <Text style={styles.subtitle}>LinkButton Component</Text>
-      </View>
     </ScrollView>
   );
 }

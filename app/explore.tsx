@@ -1,4 +1,4 @@
-import ExploreScreen from '@/screens/explore/ExploreScreen';
+import ExploreScreen from '@/screens/Explore/ExploreScreen';
 
 export default function Explore() {
   return <ExploreScreen />;

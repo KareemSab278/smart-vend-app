@@ -10,6 +10,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 const bottomRoutes = [
   { key: 'home', title: 'Home', focusedIcon: 'home' },
   { key: 'explore', title: 'Explore', focusedIcon: 'compass' },
+  { key: 'catalogue', title: 'Catalogue', focusedIcon: 'food' },
 ];
 
 export default function RootLayout() {
@@ -30,6 +31,10 @@ export default function RootLayout() {
       case 'explore':
         router.push('/explore');
         break;
+
+      case 'catalogue':
+        router.push('/catalogue');
+        break;
     }
   };
 
@@ -40,6 +45,7 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="explore" options={{ headerShown: false }} />
+            <Stack.Screen name="catalogue" options={{ headerShown: false }} />
           </Stack>
         </View>
 
