@@ -1,7 +1,8 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { MD2Colors } from 'react-native-paper';
 
-export { LoadingComponent };
+export { LoadingComponent, SomethingWentWrong };
+
 const LoadingComponent = () => {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -11,7 +12,20 @@ const LoadingComponent = () => {
     );
 };
 
+const SomethingWentWrong = () => {
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.errorMessage}>Oops!</Text>
+            <Text style={styles.subtitle}>Something went wrong</Text>
+        </View>
+    );
+}
+
 const styles = StyleSheet.create({
+    errorMessage: {
+        fontSize: 18,
+        color: '#555',
+    },
     subtitle: {
         fontSize: 16,
         color: '#555',

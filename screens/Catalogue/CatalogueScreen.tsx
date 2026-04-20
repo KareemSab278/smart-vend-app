@@ -1,4 +1,4 @@
-import { LoadingComponent } from '@/components/Loading';
+import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
 import { CatalogueItemData, fetchCatalogueData } from '@/helpers/getCatalogueItemData';
 import { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
@@ -7,26 +7,28 @@ import CatalogueItem from '../../components/CatalogueItem';
 export default function CatalogueScreen() {
     const [catalogueData, setCatalogueData] = useState<CatalogueItemData[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false);
+
     const getAndSetCatalogueData = async () => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const data = await fetchCatalogueData().then((data) => { setCatalogueData(data as CatalogueItemData[]) });
-        } catch (error) {
-            console.error('Error fetching catalogue data:', error);
-        } finally {
-            setLoading(false);
+            await fetchCatalogueData().then(
+                (data) => { data ? setCatalogueData(data as CatalogueItemData[]) : setError(true) });
+        } catch (err) {
+            console.error('Error fetching catalogue data:', err);
+            setError(true);
         }
+        setLoading(false);
     }
-    useEffect(() => {
-        getAndSetCatalogueData();
-    }, []);
+
+    useEffect(() => { getAndSetCatalogueData() }, []);
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Catalogue</Text>
-            {loading ? (
-                <LoadingComponent />
-            ) : (
+            {loading && <LoadingComponent />}
+            {error && <SomethingWentWrong />}
+            {!loading && !error &&
                 <FlatList
                     data={catalogueData}
                     keyExtractor={(item) => String(item.id)}
@@ -42,7 +44,7 @@ export default function CatalogueScreen() {
                     showsVerticalScrollIndicator={false}
                     style={styles.list}
                 />
-                )}
+            }
         </View>
     );
 }
