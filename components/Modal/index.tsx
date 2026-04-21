@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 import {
   Modal,
+  Pressable,
   StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
+  Text
 } from 'react-native';
 
 type AppModalProps = {
@@ -24,17 +23,13 @@ export default function AppModal({
 }: AppModalProps) {
   return (
     <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.backdrop}>
-          <TouchableWithoutFeedback onPress={() => {}}>
-            <View style={styles.container}>
-              {title ? <Text style={styles.title}>{title}</Text> : null}
-              {message ? <Text style={styles.message}>{message}</Text> : null}
-              {children}
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
+      <Pressable onPress={onClose} style={styles.backdrop}>
+        <Pressable onPress={() => {}} style={styles.container}>
+          {title ? <Text style={styles.title}>{title}</Text> : null}
+          {message ? <Text style={styles.message}>{message}</Text> : null}
+          {children}
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 }

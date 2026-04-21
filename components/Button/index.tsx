@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
 import { type ComponentProps } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Button, Platform, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export { FiltersButton, MainButton, SecondaryButton };
 
@@ -48,6 +48,24 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 6,
+      },
+      web: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.18)',
+      },
+    }),
   },
   appButtonText: {
     color: '#fff',

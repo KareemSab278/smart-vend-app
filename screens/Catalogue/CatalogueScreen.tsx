@@ -1,41 +1,15 @@
 import { FiltersButton } from '@/components/Button';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
-import { CatalogueItemData, fetchCatalogueData } from '@/helpers/getCatalogueItemData';
+import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogueItemData';
 import { CartStorage } from '@/store/Storage';
+import type { OrderItem } from '@/store/StorageHelpers';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import CatalogueItem from '../../components/CatalogueItem';
+import CartModal from './CartModal';
 import { CatalogueFilterModal } from './CatalogueFilterModal';
 import { styles } from './Styles';
-
-const categoryOptions = [
-  { label: 'All', value: 'all' },
-  { label: 'Drinks', value: 'drink' },
-  { label: 'Snacks', value: 'snack' },
-  { label: 'Food', value: 'food' },
-  { label: 'Dessert', value: 'dessert' },
-];
-
-const dietaryOptions = [
-  { label: 'Gluten-Free', value: 'gluten_free' },
-  { label: 'Dairy-Free', value: 'dairy_free' },
-  { label: 'Peanut-Free', value: 'peanut_free' },
-  { label: 'Kosher', value: 'kosher' },
-  { label: 'Halal', value: 'halal' },
-  { label: 'Vegan', value: 'vegan' },
-];
-
-const handleItemSelect = async (item: CatalogueItemData) => {
-  const cartItem = {
-    id: item.id,
-    name: item.name,
-    price: item.price,
-    quantity: 1,
-  };
-  await CartStorage.addToCart(cartItem);
-  console.log('Added to cart:', cartItem);
-  console.log('Current cart:', await CartStorage.getCart());
-};
 
 export default function CatalogueScreen() {
   const [catalogueData, setCatalogueData] = useState<CatalogueItemData[]>([]);
@@ -51,6 +25,8 @@ export default function CatalogueScreen() {
     vegan: false,
   });
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<OrderItem[]>([]);
+  const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
 
   const getAndSetCatalogueData = async () => {
     setLoading(true);
@@ -65,7 +41,55 @@ export default function CatalogueScreen() {
     setLoading(false);
   };
 
-  useEffect(() => { getAndSetCatalogueData(); }, []);
+  const loadCartItems = async () => {
+    const cart = await CartStorage.getCart();
+    setCartItems(cart ?? []);
+  };
+
+  const handleItemSelect = async (item: CatalogueItemData) => {
+    const cartItem = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: 1,
+    };
+
+    await CartStorage.addToCart(cartItem);
+    await loadCartItems();
+  };
+
+  const handleOpenCart = async () => {
+    await loadCartItems();
+    setCartModalOpen(true);
+  };
+
+  const handleCloseCart = () => {
+    setCartModalOpen(false);
+  };
+
+  const handleUpdateQuantity = async (itemId: number, quantity: number) => {
+    if (quantity < 1) {
+      await CartStorage.removeFromCart(itemId);
+      await loadCartItems();
+      return;
+    }
+
+    const item = cartItems.find((cartItem) => cartItem.id === itemId);
+    if (!item) return;
+
+    await CartStorage.updateCartItem({ ...item, quantity });
+    await loadCartItems();
+  };
+
+  const handleRemoveItem = async (itemId: number) => {
+    await CartStorage.removeFromCart(itemId);
+    await loadCartItems();
+  };
+
+  useEffect(() => {
+    getAndSetCatalogueData();
+    loadCartItems();
+  }, []);
 
   const filteredCatalogueData = useMemo(
     () => catalogueData.filter((item) => {
@@ -102,6 +126,7 @@ export default function CatalogueScreen() {
 
       {loading && <LoadingComponent />}
       {error && <SomethingWentWrong />}
+
       {!loading && !error && (
         <>
           {filteredCatalogueData.length === 0 ? (
@@ -125,6 +150,25 @@ export default function CatalogueScreen() {
           )}
         </>
       )}
+
+      <CartModal
+        visible={cartModalOpen}
+        items={cartItems}
+        onClose={handleCloseCart}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+      />
+
+      <TouchableOpacity style={styles.cartButton} onPress={handleOpenCart}>
+        <Text style={styles.cartButtonText}><MaterialCommunityIcons name="cart" size={20} color="#fff" /></Text>
+        {cartItems.length > 0 ? (
+          <View style={styles.cartBadge}>
+            <Text style={styles.cartBadgeText}>
+              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+            </Text>
+          </View>
+        ) : null}
+      </TouchableOpacity>
     </View>
   );
 }

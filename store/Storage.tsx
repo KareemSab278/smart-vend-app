@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+import { OrderItem, organiseOrder } from './StorageHelpers';
 
 const isWeb = Platform.OS === 'web';
 
@@ -108,7 +109,7 @@ const CartStorage = {
     addToCart: async (item: any) => {
         try {
             const cart = await Storage.getObjFromKey('cart') || [];
-            cart.push(item);
+            cart.push(item as OrderItem);
             await Storage.saveObjToKey('cart', cart);
         } catch (e) {
             console.error('Error adding item to cart:', e);
@@ -117,9 +118,47 @@ const CartStorage = {
 
     getCart: async () => {
         try {
-            return await Storage.getObjFromKey('cart') || [];
+            const cart = await Storage.getObjFromKey('cart') || [];
+            return organiseOrder(cart as OrderItem[]);
         } catch (e) {
             console.error('Error retrieving cart:', e);
+        }
+    },
+
+    saveCartItems: async (items: OrderItem[]) => {
+        try {
+            await Storage.saveObjToKey('cart', items);
+        } catch (e) {
+            console.error('Error saving cart items:', e);
+        }
+    },
+
+    updateCartItem: async (item: OrderItem) => {
+        try {
+            const cart = (await Storage.getObjFromKey('cart')) || [];
+            const filteredCart = (cart as OrderItem[]).filter(
+                (cartItem) => cartItem.id !== item.id
+            );
+
+            if (item.quantity > 0) {
+                filteredCart.push(item);
+            }
+
+            await Storage.saveObjToKey('cart', filteredCart);
+        } catch (e) {
+            console.error('Error updating cart item:', e);
+        }
+    },
+
+    removeFromCart: async (itemId: number) => {
+        try {
+            const cart = (await Storage.getObjFromKey('cart')) || [];
+            const filteredCart = (cart as OrderItem[]).filter(
+                (cartItem) => cartItem.id !== itemId
+            );
+            await Storage.saveObjToKey('cart', filteredCart);
+        } catch (e) {
+            console.error('Error removing cart item:', e);
         }
     },
 

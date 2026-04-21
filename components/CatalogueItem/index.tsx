@@ -2,8 +2,7 @@ import React from 'react';
 import { ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { Card, Chip } from 'react-native-paper';
 
-import { CatalogueItemData } from '@/helpers/getCatalogueItemData';
-import { MainButton } from '../Button';
+import { CatalogueItemData } from '@/helpers/fetchCatalogueItemData';
 
 type CatalogueItemProps = {
   item: CatalogueItemData;
@@ -50,9 +49,6 @@ export default function CatalogueItem({ item, onPress, style }: CatalogueItemPro
         </ScrollView>
       </Card.Content>
 
-      <Card.Actions style={styles.actions}>
-        <MainButton onPress={onPress} title="Select" />
-      </Card.Actions>
     </Card>
   );
 }
@@ -93,9 +89,5 @@ const styles = StyleSheet.create({
   chip: {
     marginRight: 4,
   },
-  actions: {
-    width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
+
 });

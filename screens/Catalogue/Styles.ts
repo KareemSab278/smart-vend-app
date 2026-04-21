@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export { styles };
 
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 12,
+
   },
   filterButton: {
     marginTop: 16,
@@ -69,12 +70,63 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+
   },
   listContent: {
     paddingVertical: 12,
     flexGrow: 1,
+    marginBottom: 100, // to ensure content is above the cart button
   },
   columnWrapper: {
     justifyContent: 'space-between',
+  },
+  cartButton: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 28,
+    backgroundColor: '#773eb9',
+    elevation: 14,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.35,
+        shadowRadius: 16,
+      },
+      android: {
+        elevation: 14,
+      },
+      web: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.35,
+        shadowRadius: 16,
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.24)',
+      },
+    }),
+  },
+  cartButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  cartBadge: {
+    marginLeft: 10,
+    minWidth: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+  },
+  cartBadgeText: {
+    color: '#481186bd',
+    fontWeight: '700',
   },
 });
