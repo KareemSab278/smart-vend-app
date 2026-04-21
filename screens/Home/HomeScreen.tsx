@@ -7,8 +7,7 @@ import { styles } from './Styles';
 export default function HomeScreen() {
   const router = useRouter();
 
-  const validateUser = async () => { await checkUser().then(auth => !auth && router.replace('/sign-in') ) };
-  useEffect(() => { validateUser() }, [router]);
+  useEffect(() => { (async () => { await checkUser().then(auth => !auth && router.replace('/sign-in') ) })() }, [router]);
   
   return (
     <ScrollView contentContainerStyle={styles.container}>

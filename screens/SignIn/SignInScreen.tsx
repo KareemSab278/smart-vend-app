@@ -18,8 +18,7 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [statusMessage, setStatusMessage] = useState('');
 
-  const validateUser = async () => { await checkUser().then(auth => auth && router.replace('/') ) };
-  useEffect(() => { validateUser() }, [router]);
+  useEffect(() => { (async () => { await checkUser().then(auth => auth && router.replace('/') ) })() }, [router]);
 
   const handleSignIn = async (email: string, password: string) => {
     setStatusMessage(`Signed in with ${email}`);

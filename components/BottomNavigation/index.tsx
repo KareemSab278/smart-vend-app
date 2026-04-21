@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import type { BottomNavigationProps, BottomNavigationRoute } from 'react-native-paper';
 import { BottomNavigation } from 'react-native-paper';
 
@@ -51,10 +51,13 @@ const BottomNavigationBar = <Route extends BottomNavRoute = BottomNavRoute>({
   );
 };
 
-const styles = {
+const styles: { container: ViewStyle } = {
   container: {
     backgroundColor: '#fff',
-    maxHeight: 100
+    width: '100%',
+    height: 80,
+    maxHeight: 100,
+    flexShrink: 0,
   },
 };
 

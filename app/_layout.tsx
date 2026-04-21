@@ -1,4 +1,3 @@
-import NavigationBar from '@/components/BottomNavigation';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -6,6 +5,7 @@ import { View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import 'react-native-reanimated';
 
+import BottomNavigationBar from '@/components/BottomNavigation';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const bottomRoutes = [
@@ -18,8 +18,11 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const router = useRouter();
   const segments = useSegments();
-  const activeKey = segments[0] ?? 'home';
-  const activeIndex = bottomRoutes.findIndex((route) => route.key === activeKey);
+  const currentSegment = segments[0] as string | undefined;
+  const isAuthRoute = currentSegment === 'sign-in' || currentSegment === 'sign-up';
+  const activeKey = !currentSegment ? 'home' : currentSegment;
+  const foundIndex = bottomRoutes.findIndex((route) => route.key === activeKey);
+  const activeIndex = foundIndex >= 0 ? foundIndex : 0;
 
   const handleIndexChange = (newIndex: number) => {
     const selected = bottomRoutes[newIndex];
@@ -43,7 +46,7 @@ export default function RootLayout() {
     <PaperProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, marginTop: 30 }}>
             <Stack>
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="explore" options={{ headerShown: false }} />
@@ -51,15 +54,13 @@ export default function RootLayout() {
               <Stack.Screen name="sign-in" options={{ headerShown: false }} />
             </Stack>
           </View>
-          {activeIndex !== -1 && (
-            <NavigationBar
+            <BottomNavigationBar
               routes={bottomRoutes}
-              index={activeIndex === -1 ? 0 : activeIndex}
+              index={activeIndex}
               onIndexChange={handleIndexChange}
-              renderScene={() => null}
+              renderScene={() => <View />}
               sceneAnimationEnabled={false}
             />
-          )}
         </View>
         <StatusBar style="auto" />
       </ThemeProvider>
