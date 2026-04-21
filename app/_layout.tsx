@@ -54,6 +54,7 @@ export default function RootLayout() {
               <Stack.Screen name="sign-in" options={{ headerShown: false }} />
             </Stack>
           </View>
+            {!isAuthRoute && (
             <BottomNavigationBar
               routes={bottomRoutes}
               index={activeIndex}
@@ -61,6 +62,7 @@ export default function RootLayout() {
               renderScene={() => <View />}
               sceneAnimationEnabled={false}
             />
+          )}
         </View>
         <StatusBar style="auto" />
       </ThemeProvider>

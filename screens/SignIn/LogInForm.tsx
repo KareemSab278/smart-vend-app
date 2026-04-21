@@ -1,11 +1,12 @@
 import { MainButton } from '@/components/Button';
 import { InputField } from '@/components/InputField';
+import { SignInValues } from '@/helpers/signInUser';
 import { useState } from 'react';
 import { ActivityIndicator, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { LogInStyles } from './Styles';
 type LogInFormProps = {
   onSwitchToRegister: () => void;
-  onSubmit: (email: string, password: string) => Promise<void>;
+  onSubmit: (values: SignInValues) => Promise<void>;
 };
 
 export function LogInForm({ onSwitchToRegister, onSubmit }: LogInFormProps) {
@@ -28,7 +29,7 @@ export function LogInForm({ onSwitchToRegister, onSubmit }: LogInFormProps) {
 
     setLoading(true);
     try {
-      await onSubmit(email.trim(), password);
+      await onSubmit({ email: email.trim(), password });
     } catch (err) {
       setError('Unable to sign in. Please try again.');
     }

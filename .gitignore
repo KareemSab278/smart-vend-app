@@ -44,3 +44,7 @@ app-example
 
 # secrets
 .env
+
+
+# bs
+/helpers/fakeCatalogueData.ts

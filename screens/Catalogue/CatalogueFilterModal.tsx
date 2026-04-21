@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   filterTitle: {
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   categoryGridGroup: {
     flexDirection: 'row',
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
+    marginBottom: -8,
   },
   filterItem: {
     marginRight: 8,
@@ -93,9 +94,6 @@ const styles = StyleSheet.create({
   },
   toggleItem: {
     width: '48%',
-    marginBottom: 16,
-  },
-  applyButton: {
-    marginTop: 18,
+    marginBottom: -8,
   },
 });

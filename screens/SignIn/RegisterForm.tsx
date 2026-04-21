@@ -1,18 +1,24 @@
 import { MainButton } from '@/components/Button';
 import { InputField } from '@/components/InputField';
+import { SignUpValues } from '@/helpers/signUpUser';
 import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Checkbox, ProgressBar } from 'react-native-paper';
+import { AddressForm, AddressValues } from './AddressForm';
 import { RegisterStyles } from './Styles';
 
 type RegisterFormProps = {
   onSwitchToLogin: () => void;
-  onSubmit: (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-  }) => Promise<void>;
+  onSubmit: (data: SignUpValues) => Promise<void>;
+};
+
+const initialAddressState: AddressValues = {
+  address1: '',
+  address2: '',
+  city: '',
+  county: '',
+  postcode: '',
+  phone: '',
 };
 
 export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
@@ -21,9 +27,14 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [address, setAddress] = useState<AddressValues>(initialAddressState);
   const [subscribe, setSubscribe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleAddressChange = (field: keyof AddressValues, value: string) => {
+    setAddress((previous) => ({ ...previous, [field]: value }));
+  };
 
   const handleRegister = async () => {
     setError('');
@@ -48,6 +59,11 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
       return;
     }
 
+    if (!address.address1.trim() || !address.city.trim() || !address.postcode.trim() || !address.phone.trim()) {
+      setError('Please fill in your address and phone number.');
+      return;
+    }
+
     setLoading(true);
     try {
       await onSubmit({
@@ -55,6 +71,13 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
         lastName: lastName.trim(),
         email: email.trim(),
         password,
+        address1: address.address1.trim(),
+        address2: address.address2.trim(),
+        city: address.city.trim(),
+        county: address.county.trim(),
+        postcode: address.postcode.trim(),
+        phone: address.phone.trim(),
+        subscribe,
       });
     } catch (err) {
       setError('Unable to create account. Please try again.');
@@ -106,6 +129,7 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
         secureTextEntry
         helperText="Re-enter your password."
       />
+      <AddressForm values={address} onChange={handleAddressChange} />
       <TouchableOpacity
         style={RegisterStyles.checkboxRow}
         onPress={() => setSubscribe((previous) => !previous)}

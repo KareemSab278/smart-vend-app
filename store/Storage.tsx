@@ -79,8 +79,17 @@ const Storage = {
 
 };
 
+interface User { // fields are required. if any missing then refuse app use or sign in/sign up!
+    id: number;
+    market_card_number: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    token: string;
+}
+
 const UserStorage = {
-    saveUser: async (user: any) => {
+    saveUser: async (user: User) => {
         try {
             await Storage.saveObjToKey('user', user);
         } catch (e) {
@@ -90,7 +99,7 @@ const UserStorage = {
 
     getUser: async () => {
         try {
-            return await Storage.getObjFromKey('user');
+            return await Storage.getObjFromKey('user') as User | null;
         } catch (e) {
             console.error('Error retrieving user:', e);
         }
@@ -106,10 +115,10 @@ const UserStorage = {
 }
 
 const CartStorage = {
-    addToCart: async (item: any) => {
+    addToCart: async (item: OrderItem) => {
         try {
             const cart = await Storage.getObjFromKey('cart') || [];
-            cart.push(item as OrderItem);
+            cart.push(item);
             await Storage.saveObjToKey('cart', cart);
         } catch (e) {
             console.error('Error adding item to cart:', e);
@@ -171,5 +180,5 @@ const CartStorage = {
     }
 }
 
-export { CartStorage, Storage, UserStorage };
+export { CartStorage, Storage, User, UserStorage };
 

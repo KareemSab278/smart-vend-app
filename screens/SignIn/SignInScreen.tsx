@@ -1,4 +1,8 @@
 import { checkUser } from '@/helpers/checkUser';
+import { signInUser, SignInValues } from '@/helpers/signInUser';
+import { signUpUser, SignUpValues } from '@/helpers/signUpUser';
+import { IfUserSignedIn } from '@/Security/signInCheck';
+import { User, UserStorage } from '@/store/Storage';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
@@ -20,20 +24,30 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
 
   useEffect(() => { (async () => { await checkUser().then(auth => auth && router.replace('/') ) })() }, [router]);
 
-  const handleSignIn = async (email: string, password: string) => {
-    setStatusMessage(`Signed in with ${email}`);
-    return Promise.resolve();
+  const handleSignIn = async ({ email, password }: SignInValues) => {
+    try {
+      const user: User = await signInUser({ email, password });
+      await UserStorage.saveUser(user);
+      setStatusMessage(`Welcome back, ${user.first_name}!`);
+      setTimeout(() => {
+        router.replace('/');
+      }, 1500);
+    } catch {
+      setStatusMessage('Sign in failed. Please check your credentials and try again.');
+    }
   };
 
-
-  const handleRegister = async (data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-  }) => {
-    setStatusMessage(`Welcome, ${data.firstName}!`);
-    return Promise.resolve();
+  const handleRegister = async (data: SignUpValues) => {
+    try {
+      const user: User = await signUpUser(data);
+      await UserStorage.saveUser(user);
+      setStatusMessage(`Welcome, ${user.first_name}!`);
+      setTimeout(() => {
+        router.replace('/');
+      }, 1500);
+    } catch {
+      setStatusMessage('Sign up failed. Please check your details and try again.');
+    }
   };
 
   return (
@@ -41,14 +55,11 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
       style={SignInStyles.screen}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <IfUserSignedIn goTo="/" />
+      
       <ScrollView contentContainerStyle={SignInStyles.container} keyboardShouldPersistTaps="handled">
         <View style={SignInStyles.header}>
           <Text style={SignInStyles.title}>{mode === 'login' ? 'Welcome back' : 'Create your account'}</Text>
-          <Text style={SignInStyles.subtitle}>
-            {mode === 'login'
-              ? 'Sign in to access your vending dashboard and orders.'
-              : 'Register for your account and start browsing the catalogue today.'}
-          </Text>
         </View>
 
         <View style={SignInStyles.switchButtons}>

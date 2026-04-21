@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingVertical: 12,
     paddingHorizontal: 16,
+    width: '100%',
     backgroundColor: '#481186bd',
     borderRadius: 8,
     alignSelf: 'flex-start',

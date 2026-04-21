@@ -1,16 +1,11 @@
-import { checkUser } from '@/helpers/checkUser';
-import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { IfUserNotSignedIn } from '@/Security/signInCheck';
 import { ScrollView, Text, View } from 'react-native';
 import { styles } from './Styles';
 
 export default function HomeScreen() {
-  const router = useRouter();
-
-  useEffect(() => { (async () => { await checkUser().then(auth => !auth && router.replace('/sign-in') ) })() }, [router]);
-  
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <IfUserNotSignedIn goTo="/sign-in" />
       <View style={styles.header}>
         <Text style={styles.title}>Welcome!</Text>
         <Text style={styles.text}>This is the main page</Text>

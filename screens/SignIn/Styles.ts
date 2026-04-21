@@ -117,6 +117,9 @@ const RegisterStyles = StyleSheet.create({
   nameField: {
     flex: 1,
   },
+  addressSection: {
+    marginTop: 16,
+  },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
