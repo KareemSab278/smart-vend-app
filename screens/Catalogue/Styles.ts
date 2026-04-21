@@ -75,7 +75,9 @@ const styles = StyleSheet.create({
   listContent: {
     paddingVertical: 12,
     flexGrow: 1,
-    marginBottom: 100, // to ensure content is above the cart button
+    paddingBottom: Platform.OS === 'android' ? 100 : 0, // for android
+    marginBottom: 100, // for web
+    // idk about ios yet
   },
   columnWrapper: {
     justifyContent: 'space-between',
@@ -116,17 +118,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   cartBadge: {
-    marginLeft: 10,
+    marginLeft: 5,
     minWidth: 26,
     height: 26,
-    borderRadius: 13,
-    backgroundColor: '#fff',
+    borderRadius: 50,
+    backgroundColor: '#481186bd',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 8,
   },
   cartBadgeText: {
-    color: '#481186bd',
+    color: '#ffffffbd',
     fontWeight: '700',
   },
 });

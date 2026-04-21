@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#481186bd',
+    backgroundColor: '#773eb9',
     borderRadius: 8,
     alignSelf: 'flex-start',
     flexDirection: 'row',
@@ -54,9 +54,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-      },
-      android: {
-        elevation: 6,
       },
       web: {
         shadowColor: '#000',

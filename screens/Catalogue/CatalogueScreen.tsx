@@ -167,13 +167,11 @@ export default function CatalogueScreen() {
         <Text style={styles.cartButtonText}>
           <MaterialCommunityIcons name="cart" size={20} color="#fff" />
         </Text>
-        {cartItems.length > 0 ? (
           <View style={styles.cartBadge}>
             <Text style={styles.cartBadgeText}>
-              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+              {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
             </Text>
           </View>
-        ) : null}
       </TouchableOpacity>
     </View>
   );
