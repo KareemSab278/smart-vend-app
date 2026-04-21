@@ -1,6 +1,7 @@
 import AppModal from '@/components/Modal';
+import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type CartModalProps = {
   visible: boolean;
@@ -57,6 +58,14 @@ export default function CartModal({
           ))}
 
           <View style={styles.totalRow}>
+            <Pressable style={styles.clearCartButton} onPress={() => {
+              CartStorage.clearCart();
+              onClose();
+            }}>
+              <Text style={styles.clearCartButtonText}>
+                Clear Cart
+              </Text>
+            </Pressable>
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalValue}>£{total.toFixed(2)}</Text>
           </View>
@@ -97,6 +106,17 @@ const styles = StyleSheet.create({
   removeButtonText: {
     fontSize: 12,
     color: '#444',
+    fontWeight: '600',
+  },
+  clearCartButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    backgroundColor: '#da5151',
+    borderRadius: 8,
+  },
+  clearCartButtonText: {
+    fontSize: 12,
+    color: '#fff',
     fontWeight: '600',
   },
   quantityRow: {

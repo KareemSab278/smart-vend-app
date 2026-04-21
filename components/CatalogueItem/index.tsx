@@ -14,6 +14,16 @@ export default function CatalogueItem({ item, onPress, style }: CatalogueItemPro
   const { width } = useWindowDimensions();
   const cardWidth = Math.floor((width - 32) / 2);
 
+  const dietaryTags = [
+    { label: 'Vegan', value: item.vegan },
+    { label: 'Vegetarian', value: item.vegetarian },
+    { label: 'Gluten-Free', value: item.gluten_free },
+    { label: 'Dairy-Free', value: item.dairy_free },
+    { label: 'Peanut-Free', value: item.peanut_free },
+    { label: 'Kosher', value: item.kosher },
+    { label: 'Halal', value: item.halal },
+  ];
+
   return (
     <Card
       mode="elevated"
@@ -33,19 +43,20 @@ export default function CatalogueItem({ item, onPress, style }: CatalogueItemPro
         <Text numberOfLines={2} style={styles.description}>
           {item.description}
         </Text>
-
+        
         <ScrollView
           horizontal
+          bounces
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.chipRow}
         >
-          {item.vegan ? <Chip compact style={styles.chip}>Vegan</Chip> : null}
-          {item.vegetarian ? <Chip compact style={styles.chip}>Vegetarian</Chip> : null}
-          {item.gluten_free ? <Chip compact style={styles.chip}>Gluten-Free</Chip> : null}
-          {item.dairy_free ? <Chip compact style={styles.chip}>Dairy-Free</Chip> : null}
-          {item.peanut_free ? <Chip compact style={styles.chip}>Peanut-Free</Chip> : null}
-          {item.kosher ? <Chip compact style={styles.chip}>Kosher</Chip> : null}
-          {item.halal ? <Chip compact style={styles.chip}>Halal</Chip> : null}
+          {dietaryTags.map((tag) =>
+            tag.value ? (
+              <Chip key={tag.label} onPress={onPress} style={styles.chip} mode="outlined">
+                {tag.label}
+              </Chip>
+            ) : null
+          )}
         </ScrollView>
       </Card.Content>
 

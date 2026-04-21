@@ -1,4 +1,5 @@
 import { FiltersButton } from '@/components/Button';
+import CatalogueItem from '@/components/CatalogueItem';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
 import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogueItemData';
 import { CartStorage } from '@/store/Storage';
@@ -6,7 +7,6 @@ import type { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
-import CatalogueItem from '../../components/CatalogueItem';
 import CartModal from './CartModal';
 import { CatalogueFilterModal } from './CatalogueFilterModal';
 import { styles } from './Styles';
@@ -91,6 +91,10 @@ export default function CatalogueScreen() {
     loadCartItems();
   }, []);
 
+  useEffect(() => {
+    loadCartItems();
+  }, [cartModalOpen === false]);
+
   const filteredCatalogueData = useMemo(
     () => catalogueData.filter((item) => {
       if (selectedCategory !== 'all' && item.type !== selectedCategory) {
@@ -160,7 +164,9 @@ export default function CatalogueScreen() {
       />
 
       <TouchableOpacity style={styles.cartButton} onPress={handleOpenCart}>
-        <Text style={styles.cartButtonText}><MaterialCommunityIcons name="cart" size={20} color="#fff" /></Text>
+        <Text style={styles.cartButtonText}>
+          <MaterialCommunityIcons name="cart" size={20} color="#fff" />
+        </Text>
         {cartItems.length > 0 ? (
           <View style={styles.cartBadge}>
             <Text style={styles.cartBadgeText}>
