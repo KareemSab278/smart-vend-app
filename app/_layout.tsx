@@ -48,16 +48,18 @@ export default function RootLayout() {
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="explore" options={{ headerShown: false }} />
               <Stack.Screen name="catalogue" options={{ headerShown: false }} />
+              <Stack.Screen name="sign-in" options={{ headerShown: false }} />
             </Stack>
           </View>
-
-          <NavigationBar
-            routes={bottomRoutes}
-            index={activeIndex === -1 ? 0 : activeIndex}
-            onIndexChange={handleIndexChange}
-            renderScene={() => null}
-            sceneAnimationEnabled={false}
-          />
+          {activeIndex !== -1 && (
+            <NavigationBar
+              routes={bottomRoutes}
+              index={activeIndex === -1 ? 0 : activeIndex}
+              onIndexChange={handleIndexChange}
+              renderScene={() => null}
+              sceneAnimationEnabled={false}
+            />
+          )}
         </View>
         <StatusBar style="auto" />
       </ThemeProvider>

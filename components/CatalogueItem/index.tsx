@@ -52,7 +52,7 @@ export default function CatalogueItem({ item, onPress, style }: CatalogueItemPro
         >
           {dietaryTags.map((tag) =>
             tag.value ? (
-              <Chip key={tag.label} onPress={onPress} style={styles.chip} mode="outlined">
+              <Chip key={tag.label} onPress={onPress} style={styles.chip} mode="flat">
                 {tag.label}
               </Chip>
             ) : null

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { checkUser } from '@/helpers/checkUser';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -12,13 +14,18 @@ import { RegisterForm } from './RegisterForm';
 import { SignInStyles } from './Styles';
 
 export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 'login' | 'register' }) {
+  const router = useRouter();
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [statusMessage, setStatusMessage] = useState('');
+
+  const validateUser = async () => { await checkUser().then(auth => auth && router.replace('/') ) };
+  useEffect(() => { validateUser() }, [router]);
 
   const handleSignIn = async (email: string, password: string) => {
     setStatusMessage(`Signed in with ${email}`);
     return Promise.resolve();
   };
+
 
   const handleRegister = async (data: {
     firstName: string;
