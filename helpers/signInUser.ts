@@ -7,7 +7,7 @@ interface SignInValues {
 
 export { signInUser, SignInValues };
 
-const signInUser = async (values: SignInValues) => {
+const signInUser = async (values: SignInValues): Promise<User> => {
     try {
         const response = await fetch('https://coinadrink-backend.onrender.com/api/auth/signin', {
             method: 'POST',
@@ -23,8 +23,19 @@ const signInUser = async (values: SignInValues) => {
 
         const data = await response.json();
         return data as User;
+        
     } catch (error) {
         console.error('Error signing in:', error);
         throw error;
     }
+};
+
+const handleGoogleSignIn = async (googleUser: any): Promise<string> => {
+    return ''; 
+    // https://dev.to/yhoungbrown/google-sign-in-in-react-native-expo-a-practical-production-ready-guide-5g48;
+};
+
+const handleAppleSignIn = async (): Promise<string> => {
+    return ''; 
+    // https://dev.to/yhoungbrown/apple-sign-in-in-react-native-expo-a-practical-production-ready-guide-5g48;
 };
