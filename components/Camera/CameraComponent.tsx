@@ -1,28 +1,34 @@
 import { CameraView } from "expo-camera";
 import { StyleSheet, View } from "react-native";
 
-export const CameraComponent = ({ open }: { open: boolean }) => {
+type CameraComponentProps = {
+  open: boolean;
+  onClose: () => void;
+};
 
-    if (!open) return null;
+export const CameraComponent = ({ open, onClose }: CameraComponentProps) => {
+  if (!open) return null;
 
-    const onBarcodeScanned = (event: any) => {
-        console.log(event);
-    }
+  const handleBarcodeScanned = (event: any) => {
+    console.log(event);
+    const scannedData = event?.nativeEvent?.data ?? event?.data ?? '';
+    alert(`Scanned QR Code: ${scannedData}`);
+    onClose();
+  };
 
-    return (
-        <View style={styleSheet.container}>
-            <CameraView
-                style={StyleSheet.absoluteFillObject}
-                facing="back"
-                barcodeScannerSettings={{
-                    barcodeTypes: ['qr'],
-                }}
-                onBarcodeScanned={onBarcodeScanned}
-            />
-        </View>
-    );
-
-}
+  return (
+    <View style={styleSheet.container}>
+      <CameraView
+        style={StyleSheet.absoluteFillObject}
+        facing="back"
+        barcodeScannerSettings={{
+          barcodeTypes: ['qr'],
+        }}
+        onBarcodeScanned={handleBarcodeScanned}
+      />
+    </View>
+  );
+};
 
 const styleSheet = StyleSheet.create({
     container: {

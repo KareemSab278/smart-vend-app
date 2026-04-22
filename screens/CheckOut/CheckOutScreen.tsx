@@ -69,7 +69,7 @@ export const CheckOutScreen = () => {
                 onClose={() => setActiveModal(null)}
                 children={
                     <>
-                        <CameraComponent open={activeModal === 'camera'} />
+                            <CameraComponent open={activeModal === 'camera'} onClose={() => setActiveModal(null)} />
                         <Pressable
                             style={styles.modeSwitchButton}
                             onPress={() => { setActiveModal('pin'); }}
@@ -109,12 +109,12 @@ export const CheckOutScreen = () => {
 
                     <Pressable
                         style={[styles.cancelButton, { backgroundColor: '#773eb9' }]}
-                        onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}
+                        onPress={() => { setActiveModal('camera'); setReceivedPin(null);}}
                     >
                         <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Proceed to Pay</Text>
                     </Pressable>
 
-                    <Pressable style={styles.cancelButton} onPress={() => router.back()}>
+                    <Pressable style={styles.cancelButton} onPress={() => router.push('/catalogue')}>
                         <Text style={styles.cancelButtonText}>Cancel</Text>
                     </Pressable>
                 </View>
