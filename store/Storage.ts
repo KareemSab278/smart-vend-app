@@ -117,9 +117,9 @@ const UserStorage = {
 const CartStorage = {
     addToCart: async (item: OrderItem) => {
         try {
-            const cart = await Storage.getObjFromKey('cart') || [];
-            cart.push(item);
-            await Storage.saveObjToKey('cart', cart);
+            const cart = (await Storage.getObjFromKey('cart')) || [];
+            const updatedCart = organiseOrder([...(cart as OrderItem[]), item]);
+            await Storage.saveObjToKey('cart', updatedCart);
         } catch (e) {
             console.error('Error adding item to cart:', e);
         }
@@ -145,15 +145,14 @@ const CartStorage = {
     updateCartItem: async (item: OrderItem) => {
         try {
             const cart = (await Storage.getObjFromKey('cart')) || [];
-            const filteredCart = (cart as OrderItem[]).filter(
-                (cartItem) => cartItem.id !== item.id
-            );
+            const updatedCart = (cart as OrderItem[])
+                .filter((cartItem) => cartItem.id !== item.id);
 
             if (item.quantity > 0) {
-                filteredCart.push(item);
+                updatedCart.push(item);
             }
 
-            await Storage.saveObjToKey('cart', filteredCart);
+            await Storage.saveObjToKey('cart', organiseOrder(updatedCart));
         } catch (e) {
             console.error('Error updating cart item:', e);
         }

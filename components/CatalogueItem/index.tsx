@@ -9,10 +9,12 @@ import { CatalogueItemData } from '@/helpers/fetchCatalogue';
 type CatalogueItemProps = {
   item: CatalogueItemData;
   onPress?: () => void;
+  quantity?: number;
+  selected?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
-export default function CatalogueItem({ item, onPress, style }: CatalogueItemProps) {
+export default function CatalogueItem({ item, onPress, quantity = 0, selected = false, style }: CatalogueItemProps) {
   const [infoModal, setInfoModal] = useState(false);
   const { width } = useWindowDimensions();
   const cardWidth = Math.floor((width - 32) / 2);
@@ -30,17 +32,23 @@ export default function CatalogueItem({ item, onPress, style }: CatalogueItemPro
   return (
     <Card
       mode="elevated"
-      style={[styles.card, { width: cardWidth }, style]}
+      style={[styles.card, selected && styles.selectedCard, { width: cardWidth }, style]}
       onPress={onPress}
     >
       {item.image ? (
         <Card.Cover source={{ uri: item.image }} resizeMode="cover" />
       ) : null}
 
+      {quantity > 0 ? (
+        <View style={styles.quantityBadge}>
+          <Text style={styles.quantityBadgeText}>{quantity}</Text>
+        </View>
+      ) : null}
+
       <Card.Content>
         <View style={styles.headerRow}>
           <Text style={styles.title}>{item.name}</Text>
-          <Text style={styles.price}>£{item.price.toFixed(2)} x 2</Text>
+          <Text style={styles.price}>£{item.price.toFixed(2)}</Text>
         </View>
 
         <Text numberOfLines={2} style={styles.description}>
@@ -113,13 +121,33 @@ const styles = StyleSheet.create({
   chip: {
     marginRight: 4,
     marginBottom: 4,
-    borderRadius: 50,
   },
-  dietaryTagsContainer:
-    { flexDirection: 'row', flexWrap: 'wrap', marginTop: 12 }
-  ,
+  dietaryTagsContainer: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 12 },
   dietaryTagChip: { marginRight: 4, marginBottom: 7, backgroundColor: 'green', borderRadius: 50 },
-  itemCount: { 
+  selectedCard: {
+    borderWidth: 2,
+    borderColor: '#22c55e',
+    backgroundColor: '#f4fff3',
+  },
+  quantityBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    minWidth: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#22c55e',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+    zIndex: 10,
+  },
+  quantityBadgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  itemCount: {
     flex: 1,
     fontSize: 18,
     marginBottom: 4,

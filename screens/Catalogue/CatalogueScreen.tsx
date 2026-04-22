@@ -30,6 +30,11 @@ export const CatalogueScreen = () => {
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
   const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
 
+  const cartItemQuantities = useMemo(
+    () => new Map(cartItems.map((cartItem) => [cartItem.id, cartItem.quantity])),
+    [cartItems]
+  );
+
   const getAndSetCatalogueData = async () => {
     setLoading(true);
     try {
@@ -137,12 +142,18 @@ export const CatalogueScreen = () => {
             <FlatList
               data={filteredCatalogueData}
               keyExtractor={(item) => String(item.id)}
-              renderItem={({ item }) => (
-                <CatalogueItem
-                  item={item}
-                  onPress={() => handleItemSelect(item)}
-                />
-              )}
+              renderItem={({ item }) => {
+                const itemId = Number(item.id);
+                const quantity = cartItemQuantities.get(itemId) ?? 0;
+                return (
+                  <CatalogueItem
+                    item={item}
+                    onPress={() => handleItemSelect(item)}
+                    quantity={quantity}
+                    selected={quantity > 0}
+                  />
+                );
+              }}
               numColumns={2}
               columnWrapperStyle={styles.columnWrapper}
               contentContainerStyle={styles.listContent}
