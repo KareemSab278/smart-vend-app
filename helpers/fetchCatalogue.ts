@@ -20,7 +20,7 @@ export type CatalogueItemData = {
 export { fetchCatalogueData };
 
 const fetchCatalogueData = async (): Promise<CatalogueItemData[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 1700));
   return fakeCatalogueData as CatalogueItemData[];
 };
 

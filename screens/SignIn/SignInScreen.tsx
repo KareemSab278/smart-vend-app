@@ -1,17 +1,17 @@
-import { checkUser } from '@/helpers/checkUser';
 import { signInUser, SignInValues } from '@/helpers/signInUser';
 import { signUpUser, SignUpValues } from '@/helpers/signUpUser';
+import { checkUser } from '@/Security/checkUser';
 import { IfUserSignedIn } from '@/Security/signInCheck';
 import { User, UserStorage } from '@/store/Storage';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { LogInForm } from './LogInForm';
 import { RegisterForm } from './RegisterForm';

@@ -1,17 +1,19 @@
 import { FiltersButton } from '@/components/Button';
 import CatalogueItem from '@/components/CatalogueItem';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
-import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogueItemData';
+import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogue';
 import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import CartModal from './CartModal';
 import { CatalogueFilterModal } from './CatalogueFilterModal';
 import { styles } from './Styles';
 
-export default function CatalogueScreen() {
+export const CatalogueScreen = () => {
+  const router = useRouter();
   const [catalogueData, setCatalogueData] = useState<CatalogueItemData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -54,17 +56,13 @@ export default function CatalogueScreen() {
       quantity: 1,
     };
 
-    await CartStorage.addToCart(cartItem);
+    await CartStorage.addToCart(cartItem as OrderItem);
     await loadCartItems();
   };
 
   const handleOpenCart = async () => {
     await loadCartItems();
     setCartModalOpen(true);
-  };
-
-  const handleCloseCart = () => {
-    setCartModalOpen(false);
   };
 
   const handleUpdateQuantity = async (itemId: number, quantity: number) => {
@@ -158,9 +156,13 @@ export default function CatalogueScreen() {
       <CartModal
         visible={cartModalOpen}
         items={cartItems}
-        onClose={handleCloseCart}
+        onClose={() => setCartModalOpen(false)}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
+        onCheckout={() => {
+          setCartModalOpen(false);
+          router.push('/checkout');
+        }}
       />
 
       <TouchableOpacity style={styles.cartButton} onPress={handleOpenCart}>

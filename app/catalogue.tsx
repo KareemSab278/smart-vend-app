@@ -1,4 +1,4 @@
-import CatalogueScreen from "@/screens/Catalogue/CatalogueScreen";
+import { CatalogueScreen } from "@/screens/Catalogue/CatalogueScreen";
 
 export default function Catalogue() {
   return <CatalogueScreen />;

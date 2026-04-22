@@ -9,6 +9,7 @@ type CartModalProps = {
   onClose: () => void;
   onUpdateQuantity: (id: number, quantity: number) => void;
   onRemoveItem: (id: number) => void;
+  onCheckout?: () => void;
 };
 
 export default function CartModal({
@@ -17,6 +18,7 @@ export default function CartModal({
   onClose,
   onUpdateQuantity,
   onRemoveItem,
+  onCheckout,
 }: CartModalProps) {
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -31,15 +33,17 @@ export default function CartModal({
               <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemPrice}>£{item.price.toFixed(2)}</Text>
+                
+              </View>
+
+              <View style={styles.quantityRow}>
+                
                 <TouchableOpacity
                   onPress={() => onRemoveItem(item.id)}
                   style={styles.removeButton}
                 >
                   <Text style={styles.removeButtonText}>Remove</Text>
                 </TouchableOpacity>
-              </View>
-
-              <View style={styles.quantityRow}>
                 <TouchableOpacity
                   style={styles.quantityButton}
                   onPress={() => onUpdateQuantity(item.id, item.quantity - 1)}
@@ -69,6 +73,12 @@ export default function CartModal({
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalValue}>£{total.toFixed(2)}</Text>
           </View>
+
+          {onCheckout && (
+            <Pressable style={styles.checkoutButton} onPress={onCheckout}>
+              <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
+            </Pressable>
+          )}
         </>
       )}
     </AppModal>
@@ -89,7 +99,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: 10,
   },
   itemPrice: {
     color: '#555',
@@ -102,6 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     borderRadius: 8,
     alignSelf: 'flex-start',
+    marginRight: 12,
   },
   removeButtonText: {
     fontSize: 12,
@@ -162,6 +173,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#666',
     marginTop: 16,
+    fontSize: 15,
+  },
+  checkoutButton: {
+    marginTop: 12,
+    backgroundColor: '#773eb9',
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  checkoutButtonText: {
+    color: '#fff',
+    fontWeight: '700',
     fontSize: 15,
   },
 });

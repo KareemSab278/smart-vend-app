@@ -5,7 +5,9 @@ import { styles } from './Styles';
 export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
+
       <IfUserNotSignedIn goTo="/sign-in" />
+      
       <View style={styles.header}>
         <Text style={styles.title}>Welcome!</Text>
         <Text style={styles.text}>This is the main page</Text>

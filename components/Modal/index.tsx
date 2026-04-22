@@ -22,7 +22,7 @@ export default function AppModal({
   children,
 }: AppModalProps) {
   return (
-    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose} >
       <Pressable onPress={onClose} style={styles.backdrop}>
         <Pressable onPress={() => {}} style={styles.container}>
           {title ? <Text style={styles.title}>{title}</Text> : null}
@@ -42,7 +42,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
+    maxHeight: '70%',
     width: '85%',
+    overflowY: 'auto',
     borderRadius: 16,
     backgroundColor: '#fff',
     padding: 24,

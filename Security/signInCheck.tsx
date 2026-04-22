@@ -1,4 +1,4 @@
-import { checkUser } from "@/helpers/checkUser";
+import { checkUser } from "@/Security/checkUser";
 import { RelativePathString, useRouter } from "expo-router";
 import { useEffect } from "react";
 

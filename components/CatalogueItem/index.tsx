@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { Card, Chip } from 'react-native-paper';
 
-import { CatalogueItemData } from '@/helpers/fetchCatalogueItemData';
+import { CatalogueItemData } from '@/helpers/fetchCatalogue';
 
 type CatalogueItemProps = {
   item: CatalogueItemData;
