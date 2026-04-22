@@ -5,7 +5,8 @@ import { CartStorage } from "@/store/Storage";
 import { OrderItem } from "@/store/StorageHelpers";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
+import { styles } from "./styles";
 
 export const CheckOutScreen = () => {
     const router = useRouter();
@@ -59,6 +60,8 @@ export const CheckOutScreen = () => {
                     contentContainerStyle={styles.listContent}
                 />
             )}
+
+            {/* CAMERA MODAL */}
             <AppModal
                 animationType="slide"
                 title="Scan the QR code shown on the vend display"
@@ -68,149 +71,54 @@ export const CheckOutScreen = () => {
                     <>
                         <CameraComponent open={activeModal === 'camera'} />
                         <Pressable
-                            style={[styles.cancelButton, { backgroundColor: '#773eb9', marginTop: 12 }]}
+                            style={styles.modeSwitchButton}
                             onPress={() => { setActiveModal('pin'); }}
                         >
-                            <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Use Pin Instead</Text>
+                            <Text style={styles.modeSwitchText}>Use Pin Instead</Text>
                         </Pressable>
                     </>
                 }
             />
 
+            {/* PIN MODAL */}
             <AppModal
                 animationType="slide"
                 title="Pin Mode"
                 visible={activeModal === 'pin'}
                 onClose={() => { setActiveModal(null); setReceivedPin(null); }}
                 children={
-                    <PinModeContent
-                        pin={receivedPin}
-                        onPress={() => {
-                            setActiveModal('camera'); setReceivedPin(null);
-                        }}
-                        message={loadingPin ? 'Fetching pin...' : receivedPin ?? ''}
-                    />
+                    <>
+                        <Text style={styles.pinText}>{loadingPin ? 'Fetching pin...' : receivedPin ?? ''}</Text>
+                        <Pressable
+                            style={styles.modeSwitchButton}
+                            onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}
+                        >
+                            <Text style={styles.modeSwitchText}>Use Camera Instead</Text>
+                        </Pressable>
+                    </>
                 }
             />
 
-            <View style={styles.footer}>
-                <View style={styles.totalRow}>
-                    <Text style={styles.totalLabel}>Total</Text>
-                    <Text style={styles.totalValue}>£{total.toFixed(2)}</Text>
+            {/* FOOTER */}
+            {activeModal == null &&
+                <View style={styles.footer}>
+                    <View style={styles.totalRow}>
+                        <Text style={styles.totalLabel}>Total</Text>
+                        <Text style={styles.totalValue}>£{total.toFixed(2)}</Text>
+                    </View>
+
+                    <Pressable
+                        style={[styles.cancelButton, { backgroundColor: '#773eb9' }]}
+                        onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}
+                    >
+                        <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Proceed to Pay</Text>
+                    </Pressable>
+
+                    <Pressable style={styles.cancelButton} onPress={() => router.back()}>
+                        <Text style={styles.cancelButtonText}>Cancel</Text>
+                    </Pressable>
                 </View>
-
-                <Pressable
-                    style={[styles.cancelButton, { backgroundColor: '#773eb9' }]}
-                    onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}
-                >
-                    <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Proceed to Pay</Text>
-                </Pressable>
-
-                <Pressable style={styles.cancelButton} onPress={() => router.back()}>
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                </Pressable>
-            </View>
+            }
         </View>
     );
 };
-
-const PinModeContent = ({ pin, onPress, message }: { pin: string | null, onPress: () => void, message: string }) => (
-    <>
-        <Text style={styles.pinText}>{message}</Text>
-        <Pressable
-            style={[styles.cancelButton, { backgroundColor: '#773eb9', marginTop: 12 }]}
-            onPress={onPress}
-        >
-            <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Use Camera Instead</Text>
-        </Pressable>
-    </>
-)
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingHorizontal: 24,
-        paddingTop: 16,
-    },
-    title: {
-        fontSize: 26,
-        fontWeight: '700',
-        marginBottom: 20,
-    },
-    emptyText: {
-        fontSize: 16,
-        color: '#666',
-        marginTop: 12,
-    },
-    listContent: {
-        paddingBottom: 16,
-    },
-    itemRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 12,
-    },
-    itemDetails: {
-        flex: 1,
-        marginRight: 12,
-    },
-    itemName: {
-        fontSize: 16,
-        fontWeight: '600',
-    },
-    itemQty: {
-        fontSize: 13,
-        color: '#666',
-        marginTop: 2,
-    },
-    itemPrice: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#333',
-    },
-    separator: {
-        height: 1,
-        backgroundColor: '#eee',
-    },
-    footer: {
-        borderTopWidth: 1,
-        borderTopColor: '#eee',
-        paddingTop: 16,
-        paddingBottom: 32,
-        gap: 16,
-    },
-    totalRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    totalLabel: {
-        fontSize: 18,
-        fontWeight: '700',
-    },
-    totalValue: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#773eb9',
-    },
-    cancelButton: {
-        borderWidth: 1.5,
-        borderColor: '#aaa',
-        borderRadius: 10,
-        paddingVertical: 14,
-        alignItems: 'center',
-    },
-    cancelButtonText: {
-        fontSize: 15,
-        color: '#555',
-        fontWeight: '600',
-    },
-    pinText: {
-        fontSize: 18,
-        color: '#333',
-        textAlign: 'center',
-        marginVertical: 12,
-    },
-});
