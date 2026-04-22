@@ -1,13 +1,30 @@
+import { CameraComponent } from "@/components/Camera/CameraComponent";
+import AppModal from "@/components/Modal";
+import { fetchNewPin } from "@/helpers/fetchNewPin";
 import { CartStorage } from "@/store/Storage";
 import { OrderItem } from "@/store/StorageHelpers";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
-
 export const CheckOutScreen = () => {
     const router = useRouter();
     const [cartItems, setCartItems] = useState<OrderItem[]>([]);
+    const [activeModal, setActiveModal] = useState<'camera' | 'pin' | null>(null);
+    const [receivedPin, setReceivedPin] = useState<string | null>(null);
+    const [loadingPin, setLoadingPin] = useState(false);
+
+    useEffect(() => {
+        const fetchPinCondition = activeModal === 'pin' && receivedPin === null;
+        if (!fetchPinCondition) return;
+
+        setLoadingPin(true);
+        fetchPinCondition && fetchNewPin()
+            .then((pin) => setReceivedPin(pin))
+            .catch((error) => console.error("Failed to fetch new pin:", error))
+            .finally(() => setLoadingPin(false));
+
+    }, [activeModal]);
 
     useEffect(() => {
         CartStorage.getCart()
@@ -42,12 +59,52 @@ export const CheckOutScreen = () => {
                     contentContainerStyle={styles.listContent}
                 />
             )}
+            <AppModal
+                animationType="slide"
+                title="Scan the QR code shown on the vend display"
+                visible={activeModal === 'camera'}
+                onClose={() => setActiveModal(null)}
+                children={
+                    <>
+                        <CameraComponent open={activeModal === 'camera'} />
+                        <Pressable
+                            style={[styles.cancelButton, { backgroundColor: '#773eb9', marginTop: 12 }]}
+                            onPress={() => { setActiveModal('pin'); }}
+                        >
+                            <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Use Pin Instead</Text>
+                        </Pressable>
+                    </>
+                }
+            />
+
+            <AppModal
+                animationType="slide"
+                title="Pin Mode"
+                visible={activeModal === 'pin'}
+                onClose={() => { setActiveModal(null); setReceivedPin(null); }}
+                children={
+                    <PinModeContent
+                        pin={receivedPin}
+                        onPress={() => {
+                            setActiveModal('camera'); setReceivedPin(null);
+                        }}
+                        message={loadingPin ? 'Fetching pin...' : receivedPin ?? ''}
+                    />
+                }
+            />
 
             <View style={styles.footer}>
                 <View style={styles.totalRow}>
                     <Text style={styles.totalLabel}>Total</Text>
                     <Text style={styles.totalValue}>£{total.toFixed(2)}</Text>
                 </View>
+
+                <Pressable
+                    style={[styles.cancelButton, { backgroundColor: '#773eb9' }]}
+                    onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}
+                >
+                    <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Proceed to Pay</Text>
+                </Pressable>
 
                 <Pressable style={styles.cancelButton} onPress={() => router.back()}>
                     <Text style={styles.cancelButtonText}>Cancel</Text>
@@ -56,6 +113,18 @@ export const CheckOutScreen = () => {
         </View>
     );
 };
+
+const PinModeContent = ({ pin, onPress, message }: { pin: string | null, onPress: () => void, message: string }) => (
+    <>
+        <Text style={styles.pinText}>{message}</Text>
+        <Pressable
+            style={[styles.cancelButton, { backgroundColor: '#773eb9', marginTop: 12 }]}
+            onPress={onPress}
+        >
+            <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Use Camera Instead</Text>
+        </Pressable>
+    </>
+)
 
 const styles = StyleSheet.create({
     container: {
@@ -137,5 +206,11 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#555',
         fontWeight: '600',
+    },
+    pinText: {
+        fontSize: 18,
+        color: '#333',
+        textAlign: 'center',
+        marginVertical: 12,
     },
 });

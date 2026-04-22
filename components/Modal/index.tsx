@@ -12,6 +12,7 @@ type AppModalProps = {
   message?: string;
   onClose: () => void;
   children?: ReactNode;
+  animationType?: 'none' | 'slide' | 'fade';
 };
 
 export default function AppModal({
@@ -20,11 +21,12 @@ export default function AppModal({
   message,
   onClose,
   children,
+  animationType = 'fade',
 }: AppModalProps) {
   return (
-    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose} >
-      <Pressable onPress={onClose} style={styles.backdrop}>
-        <Pressable onPress={() => {}} style={styles.container}>
+    <Modal visible={visible} animationType={animationType} transparent onRequestClose={onClose} >
+      <Pressable onPress={onClose} style={animationType === 'slide' ? styles.slideBackdrop : styles.backdrop}>
+        <Pressable onPress={() => { }} style={styles.container}>
           {title ? <Text style={styles.title}>{title}</Text> : null}
           {message ? <Text style={styles.message}>{message}</Text> : null}
           {children}
@@ -41,17 +43,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  slideBackdrop: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
-    maxHeight: '70%',
-    width: '85%',
-    overflowY: 'auto',
+    width: '90%',
     borderRadius: 16,
     backgroundColor: '#fff',
-    padding: 24,
+    padding: 20,
+    paddingBottom: 24,
     shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 20,
-    elevation: 10,
+    shadowOpacity: 0.5,
+    shadowRadius: 60,
+    elevation: 20,
   },
   title: {
     fontSize: 22,
