@@ -125,6 +125,20 @@ const CartStorage = {
         }
     },
 
+    getCartCount: async () => {
+        try {
+            const cart = await Storage.getObjFromKey('cart') || [];
+            let count = 0;
+            (cart as OrderItem[]).forEach((item) => {
+                count += item.quantity;
+            });
+            return count;
+        } catch (e) {
+            console.error('Error retrieving cart count:', e);
+            return 0;
+        }
+    },
+
     getCart: async () => {
         try {
             const cart = await Storage.getObjFromKey('cart') || [];

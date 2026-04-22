@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 export { styles };
 const styles = StyleSheet.create({
   container: {
@@ -50,5 +50,55 @@ const styles = StyleSheet.create({
         color: '#555',
         fontWeight: '600',
     },
+    cartButton: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 28,
+    backgroundColor: '#773eb9',
+    elevation: 14,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.35,
+        shadowRadius: 16,
+      },
+      android: {
+        elevation: 14,
+      },
+      web: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.35,
+        shadowRadius: 16,
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.24)',
+      },
+    }),
+  },
+      cartButtonText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 15,
+        marginLeft: 10,
+      },
+      cartBadge: {
+        marginLeft: 5,
+        minWidth: 26,
+        height: 26,
+        borderRadius: 50,
+        backgroundColor: '#481186bd',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 8,
+      },
+      cartBadgeText: {
+        color: '#ffffffbd',
+        fontWeight: '700',
+      },
 });
 

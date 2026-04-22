@@ -149,7 +149,7 @@ export const CatalogueScreen = () => {
           {filteredCatalogueData.length === 0 ? (
             <Text style={styles.emptyText}>No items match your filters.</Text>
           ) : (
-            <FlatList
+             <FlatList
               data={filteredCatalogueData}
               keyExtractor={(item) => String(item.id)}
               renderItem={({ item }) => {
