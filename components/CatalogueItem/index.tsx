@@ -75,7 +75,7 @@ export default function CatalogueItem({ item, onPress, quantity = 0, selected = 
         <Text>Price: £{item.price.toFixed(2)}</Text>
         <View style={styles.dietaryTagsContainer}>
           {dietaryTags.filter(tag => tag.value).map((tag) => (
-            <Chip key={tag.label} style={styles.dietaryTagChip} mode='outlined'>
+            <Chip key={tag.label} style={styles.dietaryTagChip} mode='flat'>
               {tag.value ? tag.label : null}
             </Chip>
           ))}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   dietaryTagsContainer: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 12 },
-  dietaryTagChip: { marginRight: 4, marginBottom: 7, backgroundColor: 'green', borderRadius: 50 },
+  dietaryTagChip: { marginRight: 4, marginBottom: 7, backgroundColor: '#22c55e', borderRadius: 50 },
   selectedCard: {
     borderWidth: 2,
     borderColor: '#22c55e',

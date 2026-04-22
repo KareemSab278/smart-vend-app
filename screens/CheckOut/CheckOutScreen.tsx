@@ -1,11 +1,11 @@
-import { CameraComponent } from "@/components/Camera/CameraComponent";
+import { CameraComponent } from "@/components/Camera";
 import AppModal from "@/components/Modal";
 import { fetchNewPin } from "@/helpers/fetchNewPin";
 import { CartStorage } from "@/store/Storage";
 import { OrderItem } from "@/store/StorageHelpers";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Easing, FlatList, Pressable, Text, View } from "react-native";
 import { styles } from "./styles";
 
 export const CheckOutScreen = () => {
@@ -13,6 +13,8 @@ export const CheckOutScreen = () => {
     const [cartItems, setCartItems] = useState<OrderItem[]>([]);
     const [activeModal, setActiveModal] = useState<'camera' | 'pin' | null>(null);
     const [receivedPin, setReceivedPin] = useState<string | null>(null);
+    const [pinDigits, setPinDigits] = useState<string[]>([]);
+    const pinAnimations = useRef<Animated.Value[]>([]);
     const [loadingPin, setLoadingPin] = useState(false);
 
     useEffect(() => {
@@ -26,6 +28,29 @@ export const CheckOutScreen = () => {
             .finally(() => setLoadingPin(false));
 
     }, [activeModal]);
+
+    useEffect(() => {
+        if (!receivedPin) {
+            setPinDigits([]);
+            pinAnimations.current = [];
+            return;
+        }
+
+        const digits = receivedPin.split('');
+        setPinDigits(digits);
+        pinAnimations.current = digits.map(() => new Animated.Value(0));
+
+        const animations = pinAnimations.current.map((value) =>
+            Animated.timing(value, {
+                toValue: 1,
+                duration: 800,
+                easing: Easing.out(Easing.quad),
+                useNativeDriver: true,
+            })
+        );
+
+        Animated.stagger(120, animations).start();
+    }, [receivedPin]);
 
     useEffect(() => {
         CartStorage.getCart()
@@ -86,12 +111,40 @@ export const CheckOutScreen = () => {
             {/* PIN MODAL */}
             <AppModal
                 animationType="slide"
-                title="Pin Mode"
+                title={loadingPin ? "Generating Pin..." : "Use This Pin to Pay"}
                 visible={activeModal === 'pin'}
                 onClose={() => { setActiveModal(null); setReceivedPin(null); }}
                 children={
                     <>
-                        <Text style={styles.pinText}>{loadingPin ? 'Fetching pin...' : receivedPin ?? ''}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            {
+                                pinDigits.map((digit, index) => {
+                                    const animation = pinAnimations.current[index] ?? new Animated.Value(0);
+                                    return (
+                                        <Animated.Text
+                                            key={index}
+                                            style={[
+                                                styles.pinText,
+                                                {
+                                                    opacity: animation,
+                                                    transform: [
+                                                        {
+                                                            translateX: animation.interpolate({
+                                                                inputRange: [0, 1],
+                                                                outputRange: [24, 0],
+                                                            }),
+                                                        },
+                                                    ],
+                                                },
+                                            ]}
+                                        >
+                                            {digit}
+                                        </Animated.Text>
+                                    );
+                                })
+                            }
+                        </View>
+
                         <Pressable
                             style={styles.modeSwitchButton}
                             onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}

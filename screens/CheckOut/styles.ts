@@ -95,9 +95,15 @@ export const styles = StyleSheet.create({
         fontWeight: '600',
     },
     pinText: {
-        fontSize: 18,
-        color: '#333',
+        fontSize: 26,
+        fontWeight: '700',
+        color: '#000000',
         textAlign: 'center',
         marginVertical: 12,
+        backgroundColor: '#00000020',
+        paddingHorizontal: 13,
+        paddingVertical: 5,
+        borderRadius: 50,
+        marginHorizontal: 5,
     },
 });

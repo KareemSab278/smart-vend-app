@@ -37,5 +37,18 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#333',
   },
+  goToCartButton: {
+        borderWidth: 1.5,
+        borderColor: '#aaa',
+        borderRadius: 10,
+        paddingVertical: 14,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    goToCartText: {
+        fontSize: 15,
+        color: '#555',
+        fontWeight: '600',
+    },
 });
 

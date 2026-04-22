@@ -5,7 +5,7 @@ import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogue'
 import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import CartModal from './CartModal';
@@ -29,6 +29,16 @@ export const CatalogueScreen = () => {
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
   const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
+
+  const params = useLocalSearchParams();
+
+  useEffect(() => {
+    if (params.openCart === 'true') {
+      loadCartItems();
+      setCartModalOpen(true);
+    }
+  }, [params.openCart]);
+
 
   const cartItemQuantities = useMemo(
     () => new Map(cartItems.map((cartItem) => [cartItem.id, cartItem.quantity])),
@@ -180,11 +190,11 @@ export const CatalogueScreen = () => {
         <Text style={styles.cartButtonText}>
           <MaterialCommunityIcons name="cart" size={20} color="#fff" />
         </Text>
-          <View style={styles.cartBadge}>
-            <Text style={styles.cartBadgeText}>
-              {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
-            </Text>
-          </View>
+        <View style={styles.cartBadge}>
+          <Text style={styles.cartBadgeText}>
+            {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
+          </Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
