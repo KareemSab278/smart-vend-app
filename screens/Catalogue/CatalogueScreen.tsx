@@ -126,12 +126,12 @@ export const CatalogueScreen = () => {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onCheckout={() => {
-          setCartModalOpen(false);
           router.push('/checkout');
+          setCartModalOpen(false);
         }}
       />
 
-      <CartButton cartItems={cart} onPress={handleOpenCart} />
+      {!cartModalOpen && <CartButton cartItems={cart} onPress={handleOpenCart} />}
     </View>
   );
 }

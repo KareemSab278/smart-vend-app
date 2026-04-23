@@ -67,8 +67,8 @@ export default function CartModal({
 
         <View style={styles.totalRow}>
           <Pressable style={styles.clearCartButton} onPress={() => {
-            CartStorage.clearCart();
             onClose();
+            CartStorage.clearCart();
           }}>
             <Text style={styles.clearCartButtonText}>
               Clear Cart
