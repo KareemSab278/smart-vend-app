@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: 24,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   filters: {
     paddingHorizontal: 24,
@@ -51,6 +56,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 18,
   },
+  searchBarContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
   filterItem: {
     marginRight: 8,
   },
@@ -68,6 +78,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   list: {
+    borderRadius: 22,
     flex: 1,
   },
   listContent: {

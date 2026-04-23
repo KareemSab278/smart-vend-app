@@ -1,6 +1,7 @@
 import { FiltersButton } from '@/components/Button';
 import CatalogueItem from '@/components/CatalogueItem';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
+import { SearchBar } from '@/components/SearchBar';
 import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogue';
 import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
@@ -27,6 +28,7 @@ export const CatalogueScreen = () => {
     vegan: false,
   });
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
   const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
   const [activeTitleIndex, setActiveTitleIndex] = useState<number>(0);
@@ -168,6 +170,19 @@ export const CatalogueScreen = () => {
     [catalogueData, selectedCategory, dietaryFilters]
   );
 
+  const visibleCatalogueData = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      return filteredCatalogueData;
+    }
+
+    return filteredCatalogueData.filter((item) => {
+      const name = item.name?.toString().toLowerCase() ?? '';
+      const description = item.description?.toString().toLowerCase() ?? '';
+      return name.includes(query) || description.includes(query);
+    });
+  }, [filteredCatalogueData, searchQuery]);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerWithButton}>
@@ -180,7 +195,9 @@ export const CatalogueScreen = () => {
           {pageTitles[activeTitleIndex]}
         </Animated.Text>
 
-        <FiltersButton onPress={() => setFilterOpen(true)} />
+        <View style={styles.headerActions}>
+          <FiltersButton onPress={() => setFilterOpen(true)} />
+        </View>
       </View>
 
       <CatalogueFilterModal
@@ -199,34 +216,47 @@ export const CatalogueScreen = () => {
 
       {!loading && !error && (
         <>
-          {filteredCatalogueData.length === 0 ? (
-            <Text style={styles.emptyText}>No items match your filters.</Text>
-          ) : (
-            <FlatList
-              data={filteredCatalogueData}
-              keyExtractor={(item) => String(item.id)}
-              renderItem={({ item }) => {
-                const itemId = Number(item.id);
-                const quantity = cartItemQuantities.get(itemId) ?? 0;
-                return (
-                  <CatalogueItem
-                    item={item}
-                    onPress={() => handleItemSelect(item)}
-                    quantity={quantity}
-                    selected={quantity > 0}
-                  />
-                );
-              }}
-              numColumns={2}
-              columnWrapperStyle={styles.columnWrapper}
-              contentContainerStyle={styles.listContent}
-              showsVerticalScrollIndicator={false}
-              style={styles.list}
-            />
-          )}
+
+          <FlatList
+            data={visibleCatalogueData}
+            keyExtractor={(item) => String(item.id)}
+            scrollEventThrottle={16}
+            ListHeaderComponent={
+              <View style={styles.searchBarContainer}>
+                <SearchBar
+                  query={searchQuery}
+                  onChangeQuery={setSearchQuery}
+                  placeholder="Search products..."
+                />
+              </View>
+            }
+            ListEmptyComponent={
+              <Text style={styles.emptyText}>
+                {searchQuery.trim()
+                  ? 'No items match your search and filters.'
+                  : 'No items match your filters.'}
+              </Text>
+            }
+            renderItem={({ item }) => {
+              const itemId = Number(item.id);
+              const quantity = cartItemQuantities.get(itemId) ?? 0;
+              return (
+                <CatalogueItem
+                  item={item}
+                  onPress={() => handleItemSelect(item)}
+                  quantity={quantity}
+                  selected={quantity > 0}
+                />
+              );
+            }}
+            numColumns={2}
+            columnWrapperStyle={styles.columnWrapper}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            style={styles.list}
+          />
         </>
       )}
-
 
       <CartModal
         visible={cartModalOpen}
@@ -247,6 +277,7 @@ export const CatalogueScreen = () => {
             opacity: cartButtonAnimation,
           }}
         >
+          {/* remove this later into buttons component file */}
           <TouchableOpacity style={styles.cartButton} onPress={handleOpenCart}>
             <Text style={styles.cartButtonText}>
               <MaterialCommunityIcons name="cart" size={20} color="#fff" />
