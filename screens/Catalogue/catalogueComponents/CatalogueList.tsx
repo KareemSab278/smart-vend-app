@@ -1,4 +1,4 @@
-import CatalogueItem from '@/components/CatalogueItem';
+import { CatalogueItem } from '@/components/CatalogueItem';
 import { SearchBar } from '@/components/SearchBar';
 import { CatalogueItemData } from '@/helpers/fetchCatalogue';
 import { OrderItem } from '@/store/StorageHelpers';

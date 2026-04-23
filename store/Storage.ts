@@ -193,5 +193,35 @@ const CartStorage = {
     }
 }
 
-export { CartStorage, Storage, User, UserStorage };
+const OrderHistoryStorage = {
+    saveCompletedOrder: async (items: import('@/helpers/fetchCatalogue').CatalogueItemData[]) => {
+        try {
+            const existing = (await Storage.getObjFromKey('order_history')) || [];
+            const merged = [...items, ...(existing as import('@/helpers/fetchCatalogue').CatalogueItemData[])];
+            const unique = merged.filter((item, index, self) => self.findIndex((i) => i.id === item.id) === index);
+            await Storage.saveObjToKey('order_history', unique);
+        } catch (e) {
+            console.error('Error saving completed order:', e);
+        }
+    },
+
+    getOrderHistory: async (): Promise<import('@/helpers/fetchCatalogue').CatalogueItemData[]> => {
+        try {
+            return (await Storage.getObjFromKey('order_history')) || [];
+        } catch (e) {
+            console.error('Error retrieving order history:', e);
+            return [];
+        }
+    },
+
+    clearOrderHistory: async () => {
+        try {
+            await Storage.removeDataFromKey('order_history');
+        } catch (e) {
+            console.error('Error clearing order history:', e);
+        }
+    },
+}
+
+export { CartStorage, OrderHistoryStorage, Storage, User, UserStorage };
 

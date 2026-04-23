@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native';
+import { Image, ScrollView, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { Card, Chip } from 'react-native-paper';
 import AppModal from '../Modal';
 
@@ -14,7 +14,9 @@ type CatalogueItemProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function CatalogueItem({ item, onPress, quantity = 0, selected = false, style }: CatalogueItemProps) {
+export { CatalogueItem, CatalogueItemProps, HorizontalItemCard };
+
+const CatalogueItem = ({ item, onPress, quantity = 0, selected = false, style }: CatalogueItemProps) => {
   const [infoModal, setInfoModal] = useState(false);
   const { width } = useWindowDimensions();
   const cardWidth = Math.floor((width - 32) / 2);
@@ -82,6 +84,26 @@ export default function CatalogueItem({ item, onPress, quantity = 0, selected = 
         </View>
       </AppModal>
     </Card>
+  );
+}
+
+function HorizontalItemCard({ item, onPress }: { item: CatalogueItemData; onPress: () => void }) {
+  return (
+    <TouchableOpacity style={styles.hCard} onPress={onPress} activeOpacity={0.75}>
+      {item.image ? (
+        <Image source={{ uri: item.image }} style={styles.hCardImage} />
+      ) : (
+        <View style={styles.hCardImagePlaceholder}>
+          <MaterialCommunityIcons name="image-off-outline" size={28} color="#ccc" />
+        </View>
+      )}
+      <Text style={styles.hCardName} numberOfLines={2}>{item.name}</Text>
+      <Text style={styles.hCardPrice}>£{item.price.toFixed(2)}</Text>
+      <View style={styles.hCardAddRow}>
+        <MaterialCommunityIcons name="cart-plus" size={14} color="#773eb9" />
+        <Text style={styles.hCardAddText}>Add to cart</Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -153,6 +175,52 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     marginRight: 8,
     marginTop: 4,
-  }
-
+  },
+  hCard: {
+    width: 120,
+    borderRadius: 12,
+    backgroundColor: '#f5f5f5',
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#e8e8e8',
+  },
+  hCardImage: {
+    width: '100%',
+    height: 90,
+    resizeMode: 'cover',
+  },
+  hCardImagePlaceholder: {
+    width: '100%',
+    height: 90,
+    backgroundColor: '#eee',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  hCardName: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#333',
+    paddingHorizontal: 8,
+    paddingTop: 6,
+  },
+  hCardPrice: {
+    fontSize: 12,
+    color: '#773eb9',
+    fontWeight: '700',
+    paddingHorizontal: 8,
+    paddingTop: 2,
+  },
+  hCardAddRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingTop: 4,
+    paddingBottom: 8,
+  },
+  hCardAddText: {
+    fontSize: 11,
+    color: '#773eb9',
+    fontWeight: '600',
+  },
 });

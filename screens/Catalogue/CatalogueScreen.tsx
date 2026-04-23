@@ -135,4 +135,3 @@ export const CatalogueScreen = () => {
     </View>
   );
 }
-
