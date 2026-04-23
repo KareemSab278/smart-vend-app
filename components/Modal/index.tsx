@@ -10,7 +10,7 @@ type AppModalProps = {
   visible: boolean;
   title?: string;
   message?: string;
-  onClose: () => void;
+  onClose?: () => void;
   children?: ReactNode;
   animationType?: 'none' | 'slide' | 'fade';
 };

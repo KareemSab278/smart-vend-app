@@ -6,9 +6,20 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     width: '100%',
-    backgroundColor: '#481186bd',
     borderRadius: 8,
     alignSelf: 'flex-start',
+    backgroundColor: '#481186bd',
+  },
+  secondaryButton: {
+    marginTop: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    width: '100%',
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+    borderWidth: 1.5,
+    borderColor: '#aaa',
+    alignItems: 'center',
   },
   searchToggleButton: {
     marginTop: 15,
@@ -66,6 +77,11 @@ export const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     textAlign: 'center',
+  },
+  secondaryButtonText: {
+    fontSize: 15,
+    color: '#555',
+    fontWeight: '600',
   },
   linkText: {
     color: '#fff',

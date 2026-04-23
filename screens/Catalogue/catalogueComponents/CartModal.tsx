@@ -2,6 +2,7 @@ import AppModal from '@/components/Modal';
 import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type CartModalProps = {
@@ -23,65 +24,66 @@ export default function CartModal({
 }: CartModalProps) {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  useEffect(() => {
+    if (!visible) return;
+    if (cart.length === 0) { onClose() }
+  }, [cart, visible]);
+
   return (
     <AppModal visible={visible} title="Cart" onClose={onClose}>
-      {cart.length === 0 ? (
-        <Text style={styles.emptyText}>Your cart is empty.</Text>
-      ) : (
-        <>
-          {cart.map((item) => (
-            <View key={item.id} style={styles.itemRow}>
-                 <TouchableOpacity
-                  onPress={() => onRemoveItem(Number(item.id))}
-                  style={styles.removeButton}
-                >
-                  <MaterialCommunityIcons name="trash-can-outline" size={20} color="#ff0000b6" />
-                </TouchableOpacity>
-              <View style={styles.itemDetails}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemPrice}>£{item.price.toFixed(2)}</Text>
-              </View>
-
-              <View style={styles.quantityRow}>
-                
-               
-                <TouchableOpacity
-                  style={styles.quantityButton}
-                  onPress={() => onUpdateQuantity(Number(item.id), item.quantity - 1)}
-                >
-                  <Text style={styles.quantityButtonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={styles.quantityValue}>{item.quantity}</Text>
-                <TouchableOpacity
-                  style={styles.quantityButton}
-                  onPress={() => onUpdateQuantity(Number(item.id), item.quantity + 1)}
-                >
-                  <Text style={styles.quantityButtonText}>+</Text>
-                </TouchableOpacity>
-              </View>
+      <>
+        {cart.map((item) => (
+          <View key={item.id} style={styles.itemRow}>
+            <TouchableOpacity
+              onPress={() => onRemoveItem(Number(item.id))}
+              style={styles.removeButton}
+            >
+              <MaterialCommunityIcons name="trash-can-outline" size={20} color="#ff0000b6" />
+            </TouchableOpacity>
+            <View style={styles.itemDetails}>
+              <Text style={styles.itemName}>{item.name}</Text>
+              <Text style={styles.itemPrice}>£{item.price.toFixed(2)}</Text>
             </View>
-          ))}
 
-          <View style={styles.totalRow}>
-            <Pressable style={styles.clearCartButton} onPress={() => {
-              CartStorage.clearCart();
-              onClose();
-            }}>
-              <Text style={styles.clearCartButtonText}>
-                Clear Cart
-              </Text>
-            </Pressable>
-            <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalValue}>£{total.toFixed(2)}</Text>
+            <View style={styles.quantityRow}>
+
+
+              <TouchableOpacity
+                style={styles.quantityButton}
+                onPress={() => onUpdateQuantity(Number(item.id), item.quantity - 1)}
+              >
+                <Text style={styles.quantityButtonText}>-</Text>
+              </TouchableOpacity>
+              <Text style={styles.quantityValue}>{item.quantity}</Text>
+              <TouchableOpacity
+                style={styles.quantityButton}
+                onPress={() => onUpdateQuantity(Number(item.id), item.quantity + 1)}
+              >
+                <Text style={styles.quantityButtonText}>+</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+        ))}
 
-          {onCheckout && (
-            <Pressable style={styles.checkoutButton} onPress={onCheckout}>
-              <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
-            </Pressable>
-          )}
-        </>
-      )}
+        <View style={styles.totalRow}>
+          <Pressable style={styles.clearCartButton} onPress={() => {
+            CartStorage.clearCart();
+            onClose();
+          }}>
+            <Text style={styles.clearCartButtonText}>
+              Clear Cart
+            </Text>
+          </Pressable>
+          <Text style={styles.totalLabel}>Total</Text>
+          <Text style={styles.totalValue}>£{total.toFixed(2)}</Text>
+        </View>
+
+        {onCheckout && (
+          <Pressable style={styles.checkoutButton} onPress={onCheckout}>
+            <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
+          </Pressable>
+        )}
+      </>
     </AppModal>
   );
 }

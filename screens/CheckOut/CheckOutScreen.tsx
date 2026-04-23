@@ -1,3 +1,4 @@
+import { MainButton, SecondaryButton } from "@/components/Button";
 import { CameraComponent } from "@/components/Camera";
 import AppModal from "@/components/Modal";
 import { fetchNewPin } from "@/helpers/fetchNewPin";
@@ -60,6 +61,16 @@ export const CheckOutScreen = () => {
 
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+    const handleSuccessfulPayment = () => {
+        CartStorage.clearCart()
+            .then(() => {
+                setCartItems([]);
+                setActiveModal(null);
+            })
+            .catch((error) => console.error("Failed to clear cart after payment:", error));
+    }
+
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Order Summary</Text>
@@ -91,52 +102,42 @@ export const CheckOutScreen = () => {
                 animationType="slide"
                 title="Scan the QR code shown on the vend display"
                 visible={activeModal === 'camera'}
-                onClose={() => setActiveModal(null)}
                 children={
                     <>
                         <CameraComponent
                             open={activeModal === 'camera'}
                             onClose={() => setActiveModal(null)}
                         />
-                        <Pressable
-                            style={styles.modeSwitchButton}
+                        <SecondaryButton
+                            title="Use Pin Instead"
                             onPress={() => { setActiveModal('pin'); }}
-                        >
-                            <Text style={styles.modeSwitchText}>Use Pin Instead</Text>
-                        </Pressable>
+                        />
+                        <MainButton
+                            title="I'm Done"
+                            onPress={() => setActiveModal(null)}
+                        />
                     </>
                 }
             />
+
+
 
             {/* PIN MODAL */}
             <AppModal
                 animationType="slide"
                 title={loadingPin ? "Generating Pin..." : "Use This Pin to Pay"}
                 visible={activeModal === 'pin'}
-                onClose={() => { setActiveModal(null); setReceivedPin(null); }}
                 children={
                     <>
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             {
                                 pinDigits.map((digit, index) => {
                                     const animation = pinAnimations.current[index] ?? new Animated.Value(0);
+                                    const pinStyle = [styles.pinText, { opacity: animation, transform: [{ translateX: animation.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }] }];
                                     return (
                                         <Animated.Text
                                             key={index}
-                                            style={[
-                                                styles.pinText,
-                                                {
-                                                    opacity: animation,
-                                                    transform: [
-                                                        {
-                                                            translateX: animation.interpolate({
-                                                                inputRange: [0, 1],
-                                                                outputRange: [24, 0],
-                                                            }),
-                                                        },
-                                                    ],
-                                                },
-                                            ]}
+                                            style={pinStyle}
                                         >
                                             {digit}
                                         </Animated.Text>
@@ -144,13 +145,14 @@ export const CheckOutScreen = () => {
                                 })
                             }
                         </View>
-
-                        <Pressable
-                            style={styles.modeSwitchButton}
+                        <SecondaryButton
+                            title="Use Camera Instead"
                             onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}
-                        >
-                            <Text style={styles.modeSwitchText}>Use Camera Instead</Text>
-                        </Pressable>
+                        />
+                        <MainButton
+                            title="I'm Done"
+                            onPress={() => setActiveModal(null)}
+                        />
                     </>
                 }
             />
@@ -167,7 +169,7 @@ export const CheckOutScreen = () => {
                         style={[styles.cancelButton, { backgroundColor: '#773eb9' }]}
                         onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}
                     >
-                        <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Proceed to Pay</Text>
+                        <Text style={[styles.cancelButtonText, { color: '#fff' }]}>Ready to Pay</Text>
                     </Pressable>
 
                     <Pressable style={styles.cancelButton} onPress={() => router.push('/catalogue')}>

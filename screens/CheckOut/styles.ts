@@ -81,19 +81,6 @@ export const styles = StyleSheet.create({
         color: '#555',
         fontWeight: '600',
     },
-    modeSwitchButton: {
-        borderWidth: 1.5,
-        borderColor: '#aaa',
-        borderRadius: 10,
-        paddingVertical: 14,
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    modeSwitchText: {
-        fontSize: 15,
-        color: '#555',
-        fontWeight: '600',
-    },
     pinText: {
         fontSize: 26,
         fontWeight: '700',

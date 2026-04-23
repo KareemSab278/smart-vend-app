@@ -2,7 +2,7 @@ import { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
 import { useEffect, useRef, type ComponentProps } from 'react';
-import { Animated, Button, Text, TouchableOpacity, View } from "react-native";
+import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 export { CartButton, FiltersButton, MainButton, SearchToggleButton, SecondaryButton };
@@ -26,7 +26,9 @@ const FiltersButton = ({ onPress }: { onPress?: () => void }) => (
 );
 
 const SecondaryButton = ({ title, onPress }: ButtonProps) => (
-  <Button title={title} onPress={onPress} />
+  <TouchableOpacity style={styles.secondaryButton} onPress={onPress}>
+    <Text style={styles.secondaryButtonText}>{title}</Text>
+  </TouchableOpacity>
 );
 
 const CartButton = ({ cartItems, onPress }: { cartItems: OrderItem[], onPress?: () => void }) => {

@@ -1,5 +1,5 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { RelativePathString, Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -9,9 +9,8 @@ import BottomNavigationBar from '@/components/BottomNavigation';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const bottomRoutes = [
-  { key: 'home', title: 'Home', focusedIcon: 'home' },
-  { key: 'catalogue', title: 'Catalogue', focusedIcon: 'food' },
-  { key: 'explore', title: 'Explore', focusedIcon: 'compass' },
+  { key: 'home', title: 'Home', focusedIcon: 'home', route: '/' },
+  { key: 'catalogue', title: 'Catalogue', focusedIcon: 'food', route: '/catalogue' },
 ];
 
 const hiddenRoutes = ['sign-in', 'sign-up', 'checkout'];
@@ -26,23 +25,8 @@ export default function RootLayout() {
   const foundIndex = bottomRoutes.findIndex((route) => route.key === activeKey);
   const activeIndex = foundIndex >= 0 ? foundIndex : 0;
 
-  const handleIndexChange = (newIndex: number) => {
-    const selected = bottomRoutes[newIndex];
-
-    switch (selected.key) {
-      case 'home':
-        router.push('/');
-        break;
-
-      case 'explore':
-        router.push('/explore');
-        break;
-
-      case 'catalogue':
-        router.push('/catalogue');
-        break;
-    }
-  };
+  const handleIndexChange = (newIndex: number) =>
+    router.push((bottomRoutes[newIndex].route || '/') as RelativePathString);
 
   const SCREENS = ['index', 'explore', 'catalogue', 'sign-in', 'checkout'];
 
@@ -53,11 +37,11 @@ export default function RootLayout() {
           <View style={{ flex: 1, marginTop: 30 }}>
             <Stack>
               {SCREENS.map((name) => (
-                <Stack.Screen key={name} name={name} options={{ headerShown: false }}/>
+                <Stack.Screen key={name} name={name} options={{ headerShown: false }} />
               ))}
             </Stack>
           </View>
-            {!isAuthRoute && (
+          {!isAuthRoute && (
             <BottomNavigationBar
               routes={bottomRoutes}
               index={activeIndex}
