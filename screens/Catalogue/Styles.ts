@@ -9,9 +9,9 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingTop: 24,
-    paddingHorizontal: 24,
+    // paddingHorizontal: 24,
     marginBottom: 12,
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: '700',
   },
   headerWithButton: {
@@ -86,58 +86,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: Platform.OS === 'android' ? 100 : 0, // for android
     marginBottom: 100, // for web
-    // idk about ios yet
   },
   columnWrapper: {
     justifyContent: 'space-between',
-  },
-  cartButton: {
-    position: 'absolute',
-    bottom: 24,
-    right: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 18,
-    borderRadius: 28,
-    backgroundColor: '#773eb9',
-    elevation: 14,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.35,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 14,
-      },
-      web: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.35,
-        shadowRadius: 16,
-        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.24)',
-      },
-    }),
-  },
-  cartButtonText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 16,
-  },
-  cartBadge: {
-    marginLeft: 5,
-    minWidth: 26,
-    height: 26,
-    borderRadius: 50,
-    backgroundColor: '#481186bd',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-  },
-  cartBadgeText: {
-    color: '#ffffffbd',
-    fontWeight: '700',
   },
 });

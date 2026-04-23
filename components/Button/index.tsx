@@ -1,10 +1,11 @@
+import { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from "expo-router";
-import { type ComponentProps } from 'react';
-import { Button, Text, TouchableOpacity } from "react-native";
+import { useEffect, useRef, type ComponentProps } from 'react';
+import { Animated, Button, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
-export { FiltersButton, MainButton, SearchToggleButton, SecondaryButton };
+export { CartButton, FiltersButton, MainButton, SearchToggleButton, SecondaryButton };
 
 const MainButton = ({ title, onPress }: ButtonProps) => (
   <TouchableOpacity style={styles.appButton} onPress={onPress}>
@@ -27,6 +28,54 @@ const FiltersButton = ({ onPress }: { onPress?: () => void }) => (
 const SecondaryButton = ({ title, onPress }: ButtonProps) => (
   <Button title={title} onPress={onPress} />
 );
+
+const CartButton = ({ cartItems, onPress }: { cartItems: OrderItem[], onPress?: () => void }) => {
+  const cartButtonAnimation = useRef(new Animated.Value(0)).current;
+  const previousCartLength = useRef(0);
+
+  useEffect(() => {
+    if (previousCartLength.current === 0 && cartItems.length > 0) {
+      Animated.spring(cartButtonAnimation, {
+        toValue: 1,
+        friction: 7,
+        tension: 120,
+        useNativeDriver: true,
+      }).start();
+    }
+
+    if (cartItems.length === 0) {
+      cartButtonAnimation.setValue(0);
+    }
+
+    previousCartLength.current = cartItems.length;
+  }, [cartItems.length, cartButtonAnimation]);
+
+
+
+  return (
+    <>
+      {cartItems.length > 0 && (
+        <Animated.View
+          style={{
+            transform: [{ scale: cartButtonAnimation }],
+            opacity: cartButtonAnimation,
+          }}
+        >
+          <TouchableOpacity style={styles.cartButton} onPress={onPress}>
+            <Text style={styles.cartButtonText}>
+              <MaterialCommunityIcons name="cart" size={20} color="#fff" />
+            </Text>
+            <View style={styles.cartBadge}>
+              <Text style={styles.cartBadgeText}>
+                {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
+      )}
+    </>
+  )
+}
 
 interface ButtonProps {
   title: string;

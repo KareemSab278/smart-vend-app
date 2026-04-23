@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   },
   filtersButton: {
     marginTop: 15,
-    marginRight: 25,
+    // marginRight: 25,
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: '#773eb9',
@@ -70,5 +70,54 @@ export const styles = StyleSheet.create({
   linkText: {
     color: '#fff',
     fontWeight: '600',
+  },
+  cartButton: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 28,
+    backgroundColor: '#773eb9',
+    elevation: 14,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.35,
+        shadowRadius: 16,
+      },
+      android: {
+        elevation: 14,
+      },
+      web: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.35,
+        shadowRadius: 16,
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.24)',
+      },
+    }),
+  },
+  cartButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  cartBadge: {
+    marginLeft: 5,
+    minWidth: 26,
+    height: 26,
+    borderRadius: 50,
+    backgroundColor: '#481186bd',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+  },
+  cartBadgeText: {
+    color: '#ffffffbd',
+    fontWeight: '700',
   },
 });

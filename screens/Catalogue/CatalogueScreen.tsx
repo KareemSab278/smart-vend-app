@@ -1,17 +1,28 @@
-import { FiltersButton } from '@/components/Button';
+import { CartButton, FiltersButton } from '@/components/Button';
 import CatalogueItem from '@/components/CatalogueItem';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
 import { SearchBar } from '@/components/SearchBar';
 import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogue';
 import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, FlatList, Text, View } from 'react-native';
 import CartModal from './CartModal';
 import { CatalogueFilterModal } from './CatalogueFilterModal';
+import { CataloguePageTitle } from './CataloguePageTitle';
 import { styles } from './Styles';
+
+const DIETARY_FILTERS_INITIAL_STATE =
+{
+  gluten_free: false,
+  dairy_free: false,
+  peanut_free: false,
+  kosher: false,
+  halal: false,
+  vegan: false,
+
+}
 
 export const CatalogueScreen = () => {
   const router = useRouter();
@@ -19,64 +30,22 @@ export const CatalogueScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [dietaryFilters, setDietaryFilters] = useState<Record<string, boolean>>({
-    gluten_free: false,
-    dairy_free: false,
-    peanut_free: false,
-    kosher: false,
-    halal: false,
-    vegan: false,
-  });
+  const [dietaryFilters, setDietaryFilters] = useState<Record<string, boolean>>(DIETARY_FILTERS_INITIAL_STATE);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
   const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
   const [activeTitleIndex, setActiveTitleIndex] = useState<number>(0);
   const titleAnimation = useRef(new Animated.Value(1)).current;
-  const cartButtonAnimation = useRef(new Animated.Value(0)).current;
-  const previousCartLength = useRef(0);
+
 
   const params = useLocalSearchParams();
-  const pageTitles = ['Today\'s Catalogue', 'Hungry?', 'Got Cravings?', 'Thirsty?', 'Our Selection', 'Find Your Flavor', 'What Will It Be?'];
 
-  const animateTitleSwap = useCallback(() => {
-    Animated.timing(titleAnimation, {
-      toValue: 0,
-      duration: 800,
-      easing: Easing.inOut(Easing.ease),
-      useNativeDriver: true,
-    }).start(() => {
-      setActiveTitleIndex((prev) => (prev + 1) % pageTitles.length);
-      Animated.timing(titleAnimation, {
-        toValue: 1,
-        duration: 800,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }).start();
-    });
-  }, [titleAnimation]);
 
-  useEffect(() => {
-    if (previousCartLength.current === 0 && cartItems.length > 0) {
-      Animated.spring(cartButtonAnimation, {
-        toValue: 1,
-        friction: 7,
-        tension: 120,
-        useNativeDriver: true,
-      }).start();
-    }
 
-    if (cartItems.length === 0) {
-      cartButtonAnimation.setValue(0);
-    }
 
-    previousCartLength.current = cartItems.length;
-  }, [cartItems.length, cartButtonAnimation]);
 
-  useEffect(() => {
-    const interval = setInterval(animateTitleSwap, 7000);
-    return () => clearInterval(interval);
-  }, [animateTitleSwap]);
+
 
 
   useEffect(() => {
@@ -110,6 +79,11 @@ export const CatalogueScreen = () => {
     setCartItems(cart ?? []);
   };
 
+  const handleOpenCart = async () => {
+    await loadCartItems();
+    setCartModalOpen(true);
+  };
+
   const handleItemSelect = async (item: CatalogueItemData) => {
     const cartItem = {
       id: item.id,
@@ -122,10 +96,7 @@ export const CatalogueScreen = () => {
     await loadCartItems();
   };
 
-  const handleOpenCart = async () => {
-    await loadCartItems();
-    setCartModalOpen(true);
-  };
+
 
   const handleUpdateQuantity = async (itemId: number, quantity: number) => {
     if (quantity < 1) {
@@ -186,14 +157,8 @@ export const CatalogueScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerWithButton}>
-        <Animated.Text
-          style={[
-            styles.title,
-            { opacity: titleAnimation },
-          ]}
-        >
-          {pageTitles[activeTitleIndex]}
-        </Animated.Text>
+        
+        <CataloguePageTitle />
 
         <View style={styles.headerActions}>
           <FiltersButton onPress={() => setFilterOpen(true)} />
@@ -232,9 +197,7 @@ export const CatalogueScreen = () => {
             }
             ListEmptyComponent={
               <Text style={styles.emptyText}>
-                {searchQuery.trim()
-                  ? 'No items match your search and filters.'
-                  : 'No items match your filters.'}
+                "{searchQuery}" didn't match any items. Try adjusting your search or filters.
               </Text>
             }
             renderItem={({ item }) => {
@@ -270,26 +233,7 @@ export const CatalogueScreen = () => {
         }}
       />
 
-      {cartItems.length > 0 && (
-        <Animated.View
-          style={{
-            transform: [{ scale: cartButtonAnimation }],
-            opacity: cartButtonAnimation,
-          }}
-        >
-          {/* remove this later into buttons component file */}
-          <TouchableOpacity style={styles.cartButton} onPress={handleOpenCart}>
-            <Text style={styles.cartButtonText}>
-              <MaterialCommunityIcons name="cart" size={20} color="#fff" />
-            </Text>
-            <View style={styles.cartBadge}>
-              <Text style={styles.cartBadgeText}>
-                {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-      )}
+      <CartButton cartItems={cartItems} onPress={handleOpenCart} />
     </View>
   );
 }
