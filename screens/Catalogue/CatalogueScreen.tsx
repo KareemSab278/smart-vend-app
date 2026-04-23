@@ -31,6 +31,8 @@ export const CatalogueScreen = () => {
   const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
   const [activeTitleIndex, setActiveTitleIndex] = useState<number>(0);
   const titleAnimation = useRef(new Animated.Value(1)).current;
+  const cartButtonAnimation = useRef(new Animated.Value(0)).current;
+  const previousCartLength = useRef(0);
 
   const params = useLocalSearchParams();
   const pageTitles = ['Today\'s Catalogue', 'Hungry?', 'Got Cravings?', 'Thirsty?', 'Our Selection', 'Find Your Flavor', 'What Will It Be?'];
@@ -51,6 +53,23 @@ export const CatalogueScreen = () => {
       }).start();
     });
   }, [titleAnimation]);
+
+  useEffect(() => {
+    if (previousCartLength.current === 0 && cartItems.length > 0) {
+      Animated.spring(cartButtonAnimation, {
+        toValue: 1,
+        friction: 7,
+        tension: 120,
+        useNativeDriver: true,
+      }).start();
+    }
+
+    if (cartItems.length === 0) {
+      cartButtonAnimation.setValue(0);
+    }
+
+    previousCartLength.current = cartItems.length;
+  }, [cartItems.length, cartButtonAnimation]);
 
   useEffect(() => {
     const interval = setInterval(animateTitleSwap, 7000);
@@ -208,6 +227,7 @@ export const CatalogueScreen = () => {
         </>
       )}
 
+
       <CartModal
         visible={cartModalOpen}
         items={cartItems}
@@ -220,16 +240,25 @@ export const CatalogueScreen = () => {
         }}
       />
 
-      <TouchableOpacity style={styles.cartButton} onPress={handleOpenCart}>
-        <Text style={styles.cartButtonText}>
-          <MaterialCommunityIcons name="cart" size={20} color="#fff" />
-        </Text>
-        <View style={styles.cartBadge}>
-          <Text style={styles.cartBadgeText}>
-            {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      {cartItems.length > 0 && (
+        <Animated.View
+          style={{
+            transform: [{ scale: cartButtonAnimation }],
+            opacity: cartButtonAnimation,
+          }}
+        >
+          <TouchableOpacity style={styles.cartButton} onPress={handleOpenCart}>
+            <Text style={styles.cartButtonText}>
+              <MaterialCommunityIcons name="cart" size={20} color="#fff" />
+            </Text>
+            <View style={styles.cartBadge}>
+              <Text style={styles.cartBadgeText}>
+                {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
+      )}
     </View>
   );
 }

@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    marginLeft: -10
   },
   filters: {
     paddingHorizontal: 24,
@@ -71,7 +69,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-
   },
   listContent: {
     paddingVertical: 12,

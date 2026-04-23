@@ -1,6 +1,7 @@
 import AppModal from '@/components/Modal';
 import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type CartModalProps = {
@@ -30,20 +31,20 @@ export default function CartModal({
         <>
           {items.map((item) => (
             <View key={item.id} style={styles.itemRow}>
+                 <TouchableOpacity
+                  onPress={() => onRemoveItem(item.id)}
+                  style={styles.removeButton}
+                >
+                  <MaterialCommunityIcons name="trash-can-outline" size={20} color="#ff0000b6" />
+                </TouchableOpacity>
               <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <Text style={styles.itemPrice}>£{item.price.toFixed(2)}</Text>
-                
               </View>
 
               <View style={styles.quantityRow}>
                 
-                <TouchableOpacity
-                  onPress={() => onRemoveItem(item.id)}
-                  style={styles.removeButton}
-                >
-                  <Text style={styles.removeButtonText}>Remove</Text>
-                </TouchableOpacity>
+               
                 <TouchableOpacity
                   style={styles.quantityButton}
                   onPress={() => onUpdateQuantity(item.id, item.quantity - 1)}
@@ -107,12 +108,12 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     marginTop: 4,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    backgroundColor: '#eee',
-    borderRadius: 8,
+    paddingVertical: 3,
+    paddingHorizontal: 4,
+    backgroundColor: '#ff000021',
+    borderRadius: 50,
     alignSelf: 'flex-start',
-    marginRight: 12,
+    marginRight: 15,
   },
   removeButtonText: {
     fontSize: 12,
