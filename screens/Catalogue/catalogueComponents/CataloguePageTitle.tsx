@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Animated } from "react-native";
 import { Easing } from "react-native-reanimated";
-import { styles } from "./Styles";
+import { styles } from "../Styles";
 const PAGE_TITLES = ['Today\'s Catalogue', 'Hungry?', 'Find your flavor', 'Need a drink?', 'Treat yourself', 'Craving something?', 'What will it be?'];
   
 

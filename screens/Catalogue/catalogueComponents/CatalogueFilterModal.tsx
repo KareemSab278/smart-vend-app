@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
-import AppModal from '../../components/Modal';
-import RadioButton from '../../components/RadioButton';
-import Toggle from '../../components/Toggle';
+import AppModal from '../../../components/Modal';
+import RadioButton from '../../../components/RadioButton';
+import Toggle from '../../../components/Toggle';
 
 type CatalogueFilterModalProps = {
   visible: boolean;

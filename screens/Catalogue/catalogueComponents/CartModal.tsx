@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 
 type CartModalProps = {
   visible: boolean;
-  items: OrderItem[];
+  cart: OrderItem[];
   onClose: () => void;
   onUpdateQuantity: (id: number, quantity: number) => void;
   onRemoveItem: (id: number) => void;
@@ -15,24 +15,24 @@ type CartModalProps = {
 
 export default function CartModal({
   visible,
-  items,
+  cart,
   onClose,
   onUpdateQuantity,
   onRemoveItem,
   onCheckout,
 }: CartModalProps) {
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <AppModal visible={visible} title="Cart" onClose={onClose}>
-      {items.length === 0 ? (
+      {cart.length === 0 ? (
         <Text style={styles.emptyText}>Your cart is empty.</Text>
       ) : (
         <>
-          {items.map((item) => (
+          {cart.map((item) => (
             <View key={item.id} style={styles.itemRow}>
                  <TouchableOpacity
-                  onPress={() => onRemoveItem(item.id)}
+                  onPress={() => onRemoveItem(Number(item.id))}
                   style={styles.removeButton}
                 >
                   <MaterialCommunityIcons name="trash-can-outline" size={20} color="#ff0000b6" />
@@ -47,14 +47,14 @@ export default function CartModal({
                
                 <TouchableOpacity
                   style={styles.quantityButton}
-                  onPress={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                  onPress={() => onUpdateQuantity(Number(item.id), item.quantity - 1)}
                 >
                   <Text style={styles.quantityButtonText}>-</Text>
                 </TouchableOpacity>
                 <Text style={styles.quantityValue}>{item.quantity}</Text>
                 <TouchableOpacity
                   style={styles.quantityButton}
-                  onPress={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                  onPress={() => onUpdateQuantity(Number(item.id), item.quantity + 1)}
                 >
                   <Text style={styles.quantityButtonText}>+</Text>
                 </TouchableOpacity>
