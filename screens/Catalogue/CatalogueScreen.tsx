@@ -43,6 +43,7 @@ export const CatalogueScreen = () => {
       const data = await catalogueStorage.getCatalogueData();
       if (Array.isArray(data) && data.length > 0) {
         setCatalogueData(data as CatalogueItemData[]);
+        console.log('Catalogue data loaded from cache.');
       } else {
         setError(true);
       }

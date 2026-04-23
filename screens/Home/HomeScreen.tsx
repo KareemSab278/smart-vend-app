@@ -30,8 +30,8 @@ export default function HomeScreen() {
       setCart(cartItems ?? []);
       setPreviouslyOrdered(orderHistory);
       setFavourites(favs);
-
       await fetchCatalogueData();
+      console.log('Catalogue data fetched and cached.');
     };
     loadData();
   }, []);

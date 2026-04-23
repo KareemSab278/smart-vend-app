@@ -18,20 +18,13 @@ export type CatalogueItemData = {
 };
 
 const fetchCatalogueData = async (): Promise<CatalogueItemData[]> => {
-  const existingCatalogue = await catalogueStorage.getCatalogueData();
-  if (Array.isArray(existingCatalogue) && existingCatalogue.length > 0) {
-    return existingCatalogue as CatalogueItemData[];
-  }
-
-  await new Promise((resolve) => setTimeout(resolve, 1700));
-  await catalogueStorage.saveCatalogueData(fakeCatalogueData);
-  return fakeCatalogueData;
+  // get fresh catalogue when this fn is called and save to cache
+  console.log('Fetching catalogue data...');
+  const catalogueData = await new Promise((resolve) => setTimeout(() => resolve(fakeCatalogueData), 1700));
+  await catalogueStorage.saveCatalogueData(catalogueData);
+  return catalogueData as CatalogueItemData[];
 };
 
-const getCachedCatalogueData = async (): Promise<CatalogueItemData[] | null> => {
-  const existingCatalogue = await catalogueStorage.getCatalogueData();
-  return Array.isArray(existingCatalogue) ? (existingCatalogue as CatalogueItemData[]) : null;
-};
 
-export { fetchCatalogueData, getCachedCatalogueData };
+export { fetchCatalogueData };
 
