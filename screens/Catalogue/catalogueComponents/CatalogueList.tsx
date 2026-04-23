@@ -54,7 +54,6 @@ export const CatalogueList = ({ cart, handleItemSelect, catalogueData, selectedC
     }, [filteredCatalogueData, searchQuery]);
 
 
-
     return (
         <FlatList
             data={visibleCatalogueData}

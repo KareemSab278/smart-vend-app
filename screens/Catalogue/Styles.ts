@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingTop: 24,
-    // paddingHorizontal: 24,
     marginBottom: 12,
     fontSize: 30,
     fontWeight: '700',
@@ -19,6 +18,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 24,
+    
   },
   headerActions: {
     flexDirection: 'row',
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   list: {
-    borderRadius: 22,
     flex: 1,
   },
   listContent: {

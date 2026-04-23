@@ -193,35 +193,33 @@ const CartStorage = {
     }
 }
 
-const OrderHistoryStorage = {
-    saveCompletedOrder: async (items: import('@/helpers/fetchCatalogue').CatalogueItemData[]) => {
+
+const catalogueStorage = {
+    saveCatalogueData: async (data: any) => {
         try {
-            const existing = (await Storage.getObjFromKey('order_history')) || [];
-            const merged = [...items, ...(existing as import('@/helpers/fetchCatalogue').CatalogueItemData[])];
-            const unique = merged.filter((item, index, self) => self.findIndex((i) => i.id === item.id) === index);
-            await Storage.saveObjToKey('order_history', unique);
+            await Storage.saveObjToKey('catalogue', data);
         } catch (e) {
-            console.error('Error saving completed order:', e);
+            console.error('Error saving catalogue data:', e);
         }
     },
 
-    getOrderHistory: async (): Promise<import('@/helpers/fetchCatalogue').CatalogueItemData[]> => {
+    getCatalogueData: async () => {
         try {
-            return (await Storage.getObjFromKey('order_history')) || [];
+            return await Storage.getObjFromKey('catalogue');
         } catch (e) {
-            console.error('Error retrieving order history:', e);
-            return [];
+            console.error('Error retrieving catalogue data:', e);
         }
     },
 
-    clearOrderHistory: async () => {
+    clearCatalogueData: async () => {
         try {
-            await Storage.removeDataFromKey('order_history');
+            await Storage.removeDataFromKey('catalogue');
         } catch (e) {
-            console.error('Error clearing order history:', e);
+            console.error('Error clearing catalogue data:', e);
         }
-    },
+    }
 }
 
-export { CartStorage, OrderHistoryStorage, Storage, User, UserStorage };
+
+export { CartStorage, catalogueStorage, Storage, User, UserStorage };
 

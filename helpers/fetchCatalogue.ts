@@ -1,5 +1,5 @@
+import { catalogueStorage } from "@/store/Storage";
 import { fakeCatalogueData } from "./fakeCatalogueData";
-
 export type CatalogueItemData = {
   id: string | number;
   name: string;
@@ -17,10 +17,21 @@ export type CatalogueItemData = {
   [key: string]: unknown;
 };
 
-export { fetchCatalogueData };
-
 const fetchCatalogueData = async (): Promise<CatalogueItemData[]> => {
+  const existingCatalogue = await catalogueStorage.getCatalogueData();
+  if (Array.isArray(existingCatalogue) && existingCatalogue.length > 0) {
+    return existingCatalogue as CatalogueItemData[];
+  }
+
   await new Promise((resolve) => setTimeout(resolve, 1700));
-  return fakeCatalogueData as CatalogueItemData[];
+  await catalogueStorage.saveCatalogueData(fakeCatalogueData);
+  return fakeCatalogueData;
 };
+
+const getCachedCatalogueData = async (): Promise<CatalogueItemData[] | null> => {
+  const existingCatalogue = await catalogueStorage.getCatalogueData();
+  return Array.isArray(existingCatalogue) ? (existingCatalogue as CatalogueItemData[]) : null;
+};
+
+export { fetchCatalogueData, getCachedCatalogueData };
 

@@ -28,7 +28,7 @@ export default function RootLayout() {
   const handleIndexChange = (newIndex: number) =>
     router.push((bottomRoutes[newIndex].route || '/') as RelativePathString);
 
-  const SCREENS = ['index', 'explore', 'catalogue', 'sign-in', 'checkout'];
+  const SCREENS = ['index', 'catalogue', 'sign-in', 'checkout'];
 
   return (
     <PaperProvider>

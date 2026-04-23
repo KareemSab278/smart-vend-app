@@ -1,7 +1,7 @@
 import { CartButton, FiltersButton } from '@/components/Button';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
-import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogue';
-import { CartStorage } from '@/store/Storage';
+import { CatalogueItemData } from '@/helpers/fetchCatalogue';
+import { CartStorage, catalogueStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -20,7 +20,6 @@ const DIETARY_FILTERS_INITIAL_STATE =
   kosher: false,
   halal: false,
   vegan: false,
-
 }
 
 export const CatalogueScreen = () => {
@@ -38,12 +37,20 @@ export const CatalogueScreen = () => {
 
   const getAndSetCatalogueData = async () => {
     setLoading(true);
+    setError(false);
 
-    await fetchCatalogueData()
-      .then((data) => { data ? setCatalogueData(data as CatalogueItemData[]) : setError(true) })
-      .catch(() => setError(true))
-
-    setLoading(false);
+    try {
+      const data = await catalogueStorage.getCatalogueData();
+      if (Array.isArray(data) && data.length > 0) {
+        setCatalogueData(data as CatalogueItemData[]);
+      } else {
+        setError(true);
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
 
@@ -72,7 +79,6 @@ export const CatalogueScreen = () => {
 
     await CartStorage.addToCart({ id, name, price, quantity: 1 } as OrderItem).then(loadCartItems);
   };
-
 
 
   useEffect(() => { getAndSetCatalogueData().then(loadCartItems) }, []);
@@ -110,6 +116,7 @@ export const CatalogueScreen = () => {
 
       {loading && <LoadingComponent />}
       {error && <SomethingWentWrong />}
+
       {allOk && <CatalogueList
         cart={cart}
         handleItemSelect={handleItemSelect}

@@ -1,6 +1,6 @@
 import { CartButton } from '@/components/Button';
 import { HorizontalItemCard } from '@/components/CatalogueItem';
-import { CatalogueItemData } from '@/helpers/fetchCatalogue';
+import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogue';
 import { fetchFavourites } from '@/helpers/fetchFavourites';
 import { fetchOrderHistory } from '@/helpers/fetchOrderHistory';
 import { IfUserNotSignedIn } from '@/Security/signInCheck';
@@ -26,9 +26,12 @@ export default function HomeScreen() {
         fetchOrderHistory(),
         fetchFavourites(),
       ]);
+
       setCart(cartItems ?? []);
       setPreviouslyOrdered(orderHistory);
       setFavourites(favs);
+
+      await fetchCatalogueData();
     };
     loadData();
   }, []);
@@ -53,7 +56,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Previously Ordered</Text>
+          <Text style={styles.sectionTitle}>You Previously Ordered</Text>
           {previouslyOrdered.length > 0 ? (
             <FlatList
               data={previouslyOrdered}
@@ -83,7 +86,7 @@ export default function HomeScreen() {
               )}
             />
           ) : (
-            <Text style={styles.emptyText}>No favourites added yet.</Text>
+            <Text style={styles.emptyText}>No favourites found yet.</Text>
           )}
         </View>
 
