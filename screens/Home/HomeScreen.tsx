@@ -2,13 +2,14 @@ import { IfUserNotSignedIn } from '@/Security/signInCheck';
 import { CartStorage } from '@/store/Storage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './Styles';
 
 export default function HomeScreen() {
   const [cartActive, setCartActive] = useState<boolean>(false);
   const [cartCount, setCartCount] = useState<number>(0);
+  const username = useRef<string>('User').current || 'User';
 
   const router = useRouter();
 
@@ -28,9 +29,14 @@ export default function HomeScreen() {
       <IfUserNotSignedIn goTo="/sign-in" />
 
       <View style={styles.header}>
-        <Text style={styles.title}>Welcome!</Text>
-        <Text style={styles.text}>This is the main page</Text>
+        <Text style={styles.title}>Welcome Back, {username}</Text>
+        <Text style={styles.subtitle}>Explore our latest products and offers</Text>
 
+        <Text style={styles.sectionTitle}>Your Favorites</Text>
+
+        <Text style={styles.sectionTitle}>Featured Products</Text>
+
+        <Text style={styles.sectionTitle}>Previously Ordered</Text>
 
       </View>
         {cartActive &&
@@ -41,8 +47,9 @@ export default function HomeScreen() {
             <MaterialCommunityIcons name="cart" size={20} color="#fff" />
             <Text style={styles.cartButtonText}>
               {/* There's {cartCount === 1 ? 'an' : cartCount} item{cartCount === 1 ? '' : 's'} in your cart */}
-              Continue where you left off?
+              Continue to Cart
             </Text>
+            <MaterialCommunityIcons name="chevron-right" size={20} color="#fff" />
           </TouchableOpacity>
         }
     </ScrollView>

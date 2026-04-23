@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: '600',
         fontSize: 15,
-        marginLeft: 10,
+        marginLeft: 7,
       },
       cartBadge: {
         marginLeft: 5,

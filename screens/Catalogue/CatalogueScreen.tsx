@@ -6,8 +6,8 @@ import { CartStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, Easing, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import CartModal from './CartModal';
 import { CatalogueFilterModal } from './CatalogueFilterModal';
 import { styles } from './Styles';
@@ -29,8 +29,34 @@ export const CatalogueScreen = () => {
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
   const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
+  const [activeTitleIndex, setActiveTitleIndex] = useState<number>(0);
+  const titleAnimation = useRef(new Animated.Value(1)).current;
 
   const params = useLocalSearchParams();
+  const pageTitles = ['Today\'s Catalogue', 'Hungry?', 'Got Cravings?', 'Thirsty?', 'Our Selection', 'Find Your Flavor', 'What Will It Be?'];
+
+  const animateTitleSwap = useCallback(() => {
+    Animated.timing(titleAnimation, {
+      toValue: 0,
+      duration: 800,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start(() => {
+      setActiveTitleIndex((prev) => (prev + 1) % pageTitles.length);
+      Animated.timing(titleAnimation, {
+        toValue: 1,
+        duration: 800,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    });
+  }, [titleAnimation]);
+
+  useEffect(() => {
+    const interval = setInterval(animateTitleSwap, 7000);
+    return () => clearInterval(interval);
+  }, [animateTitleSwap]);
+
 
   useEffect(() => {
     if (params.openCart === 'true') {
@@ -126,7 +152,15 @@ export const CatalogueScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerWithButton}>
-        <Text style={styles.title}>Catalogue</Text>
+        <Animated.Text
+          style={[
+            styles.title,
+            { opacity: titleAnimation },
+          ]}
+        >
+          {pageTitles[activeTitleIndex]}
+        </Animated.Text>
+
         <FiltersButton onPress={() => setFilterOpen(true)} />
       </View>
 
@@ -149,7 +183,7 @@ export const CatalogueScreen = () => {
           {filteredCatalogueData.length === 0 ? (
             <Text style={styles.emptyText}>No items match your filters.</Text>
           ) : (
-             <FlatList
+            <FlatList
               data={filteredCatalogueData}
               keyExtractor={(item) => String(item.id)}
               renderItem={({ item }) => {
