@@ -10,7 +10,7 @@ import { CatalogueItemType } from '@/Types/Catalogue';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
-import { UserProfileModal } from './components/UserModal';
+import { UserProfileModal } from './homeComponents/UserModal';
 import { styles } from './Styles';
 
 export default function HomeScreen() {
