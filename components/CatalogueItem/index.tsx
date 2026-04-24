@@ -1,18 +1,11 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Image, ScrollView, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Card, Chip } from 'react-native-paper';
 import AppModal from '../Modal';
 
-import { CatalogueItemData } from '@/helpers/fetchCatalogue';
+import { CatalogueItemProps, CatalogueItemType } from '@/Types/Catalogue';
 
-type CatalogueItemProps = {
-  item: CatalogueItemData;
-  onPress?: () => void;
-  quantity?: number;
-  selected?: boolean;
-  style?: StyleProp<ViewStyle>;
-};
 
 export { CatalogueItem, CatalogueItemProps, HorizontalItemCard };
 
@@ -87,7 +80,7 @@ const CatalogueItem = ({ item, onPress, quantity = 0, selected = false, style }:
   );
 }
 
-function HorizontalItemCard({ item, onPress }: { item: CatalogueItemData; onPress: () => void }) {
+function HorizontalItemCard({ item, onPress }: { item: CatalogueItemType; onPress: () => void }) {
   return (
     <TouchableOpacity style={styles.hCard} onPress={onPress} activeOpacity={0.75}>
       {item.image ? (

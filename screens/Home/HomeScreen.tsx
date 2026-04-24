@@ -1,11 +1,12 @@
 import { CartButton } from '@/components/Button';
 import { HorizontalItemCard } from '@/components/CatalogueItem';
-import { CatalogueItemData, fetchCatalogueData } from '@/helpers/fetchCatalogue';
+import { fetchCatalogueData } from '@/helpers/fetchCatalogue';
 import { fetchFavourites } from '@/helpers/fetchFavourites';
 import { fetchOrderHistory } from '@/helpers/fetchOrderHistory';
 import { IfUserNotSignedIn } from '@/Security/signInCheck';
-import { CartStorage } from '@/store/Storage';
+import { CartStorage, User, UserStorage } from '@/store/Storage';
 import { OrderItem } from '@/store/StorageHelpers';
+import { CatalogueItemType } from '@/Types/Catalogue';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
@@ -13,36 +14,32 @@ import { styles } from './Styles';
 
 export default function HomeScreen() {
   const [cart, setCart] = useState<OrderItem[]>([]);
-  const [previouslyOrdered, setPreviouslyOrdered] = useState<CatalogueItemData[]>([]);
-  const [favourites, setFavourites] = useState<CatalogueItemData[]>([]);
-  const username = useRef<string>('User').current || 'User';
-
+  const [previouslyOrdered, setPreviouslyOrdered] = useState<CatalogueItemType[]>([]);
+  const [favourites, setFavourites] = useState<CatalogueItemType[]>([]);
+  const user = useRef<User | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const loadData = async () => {
-      const [cartItems, orderHistory, favs] = await Promise.all([
-        CartStorage.getCart(),
-        fetchOrderHistory(),
-        fetchFavourites(),
-      ]);
+  const loadData = async () => {
+    await Promise.all([
+      UserStorage.getUser().then(u => user.current = u as User),
+      CartStorage.getCart().then(c => setCart(c as OrderItem[])),
+      fetchOrderHistory().then(setPreviouslyOrdered),
+      fetchFavourites().then(setFavourites),
+      fetchCatalogueData()
+    ])
+  };
 
-      setCart(cartItems ?? []);
-      setPreviouslyOrdered(orderHistory);
-      setFavourites(favs);
-      await fetchCatalogueData();
-      console.log('Catalogue data fetched and cached.');
-    };
-    loadData();
-  }, []);
-
-  const addToCart = async (item: CatalogueItemData) => {
-    await CartStorage.addToCart({ id: item.id as number, name: item.name, price: item.price, quantity: 1 });
-    const updatedCart = await CartStorage.getCart();
-    setCart(updatedCart ?? []);
+  const addToCart = async (item: CatalogueItemType) => {
+    await CartStorage.addToCart({ ...item, quantity: 1 } as OrderItem)
+      .then(CartStorage.getCart)
+      .then(c => setCart(c as OrderItem[]))
+      .catch(e => console.error('Error adding to cart:', e));
   };
 
   const handleCartPress = () => router.push('/catalogue?openCart=true');
+
+
+  useEffect(() => { loadData() }, []);
 
   return (
     <View style={styles.screen}>
@@ -51,7 +48,7 @@ export default function HomeScreen() {
         <IfUserNotSignedIn goTo="/sign-in" />
 
         <View style={styles.header}>
-          <Text style={styles.title}>Welcome Back, {username}</Text>
+          {user.current && <Text style={styles.title}>Welcome Back, {user.current?.first_name}</Text>}
           <Text style={styles.subtitle}>Explore our latest products and offers</Text>
         </View>
 
@@ -65,7 +62,7 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.hList}
               renderItem={({ item }) => (
-                <HorizontalItemCard item={item} onPress={() => addToCart(item)} />
+                <HorizontalItemCard item={item} onPress={() => addToCart(item as CatalogueItemType)} />
               )}
             />
           ) : (<Text style={styles.emptyText}>No previous orders yet.</Text>)

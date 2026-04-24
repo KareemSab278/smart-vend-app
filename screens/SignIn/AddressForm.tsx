@@ -1,15 +1,7 @@
 import { InputField } from '@/components/InputField';
+import { AddressValues } from '@/Types/User';
 import { View } from 'react-native';
 import { RegisterStyles } from './Styles';
-
-export type AddressValues = {
-  address1: string;
-  address2: string;
-  city: string;
-  county: string;
-  postcode: string;
-  phone: string;
-};
 
 type AddressFormProps = {
   values: AddressValues;

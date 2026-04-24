@@ -1,17 +1,18 @@
-import { signInUser, SignInValues } from '@/helpers/signInUser';
-import { signUpUser, SignUpValues } from '@/helpers/signUpUser';
+import { signInUser } from '@/helpers/signInUser';
+import { signUpUser } from '@/helpers/signUpUser';
 import { checkUser } from '@/Security/checkUser';
 import { IfUserSignedIn } from '@/Security/signInCheck';
 import { User, UserStorage } from '@/store/Storage';
+import { SignInValues, SignUpValues } from '@/Types/User';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { LogInForm } from './LogInForm';
 import { RegisterForm } from './RegisterForm';
@@ -26,7 +27,7 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
 
   const handleSignIn = async ({ email, password }: SignInValues) => {
     try {
-      const user: User = await signInUser({ email, password });
+      const user: User = await signInUser({ email: email, password: password });
       await UserStorage.saveUser(user);
       setStatusMessage(`Welcome back, ${user.first_name}!`);
       setTimeout(() => {
@@ -39,7 +40,7 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
 
   const handleRegister = async (data: SignUpValues) => {
     try {
-      const user: User = await signUpUser(data);
+      const user = await signUpUser(data) as unknown as User;
       await UserStorage.saveUser(user);
       setStatusMessage(`Welcome, ${user.first_name}!`);
       setTimeout(() => {

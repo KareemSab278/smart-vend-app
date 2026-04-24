@@ -1,3 +1,4 @@
+import { User } from '@/Types/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { OrderItem, organiseOrder } from './StorageHelpers';
@@ -78,15 +79,6 @@ const Storage = {
 
 
 };
-
-interface User { // fields are required. if any missing then refuse app use or sign in/sign up!
-    id: number;
-    market_card_number: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    token: string;
-}
 
 const UserStorage = {
     saveUser: async (user: User) => {

@@ -1,8 +1,8 @@
 import { CartButton, FiltersButton } from '@/components/Button';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
-import { CatalogueItemData } from '@/helpers/fetchCatalogue';
 import { CartStorage, catalogueStorage } from '@/store/Storage';
 import type { OrderItem } from '@/store/StorageHelpers';
+import { CatalogueItemType } from '@/Types/Catalogue';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
@@ -25,7 +25,7 @@ const DIETARY_FILTERS_INITIAL_STATE =
 export const CatalogueScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const [catalogueData, setCatalogueData] = useState<CatalogueItemData[]>([]);
+  const [catalogueData, setCatalogueData] = useState<CatalogueItemType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -42,7 +42,7 @@ export const CatalogueScreen = () => {
     try {
       const data = await catalogueStorage.getCatalogueData();
       if (Array.isArray(data) && data.length > 0) {
-        setCatalogueData(data as CatalogueItemData[]);
+        setCatalogueData(data as CatalogueItemType[]);
         console.log('Catalogue data loaded from cache.');
       } else {
         setError(true);
@@ -75,7 +75,7 @@ export const CatalogueScreen = () => {
 
   const handleRemoveItem = async (itemId: number) => await CartStorage.removeFromCart(itemId).then(loadCartItems);
 
-  const handleItemSelect = async (item: CatalogueItemData) => {
+  const handleItemSelect = async (item: CatalogueItemType) => {
     const { id, name, price } = item;
 
     await CartStorage.addToCart({ id, name, price, quantity: 1 } as OrderItem).then(loadCartItems);

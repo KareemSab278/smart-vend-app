@@ -1,10 +1,10 @@
 import { MainButton } from '@/components/Button';
 import { InputField } from '@/components/InputField';
-import { SignUpValues } from '@/helpers/signUpUser';
+import { AddressValues, SignUpValues } from '@/Types/User';
 import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Checkbox, ProgressBar } from 'react-native-paper';
-import { AddressForm, AddressValues } from './AddressForm';
+import { AddressForm } from './AddressForm';
 import { RegisterStyles } from './Styles';
 
 type RegisterFormProps = {
@@ -67,8 +67,8 @@ export function RegisterForm({ onSwitchToLogin, onSubmit }: RegisterFormProps) {
     setLoading(true);
     try {
       await onSubmit({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
         email: email.trim(),
         password,
         address1: address.address1.trim(),

@@ -1,7 +1,6 @@
 import { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link } from "expo-router";
-import { useEffect, useRef, type ComponentProps } from 'react';
+import { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
@@ -84,8 +83,3 @@ interface ButtonProps {
   title: string;
   onPress?: () => void;
 };
-
-type LinkProps = ComponentProps<typeof Link> & {
-  title: string;
-};
-

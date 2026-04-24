@@ -1,41 +1,39 @@
 import { User } from "@/store/Storage";
+import { SignInValues } from "@/Types/User";
+import { callAPI } from "./callAPI";
 
-interface SignInValues {
-    email: string;
-    password: string;
-}
 
-export { signInUser, SignInValues };
+const DEVELOPMENT_MODE = true;
 
-const signInUser = async (values: SignInValues): Promise<User> => {
-    try {
-        const response = await fetch('https://coinadrink-backend.onrender.com/api/auth/signin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values),
-        });
+export const signInUser = async (values: SignInValues): Promise<User> => {
 
-        if (!response.ok) {
-            throw new Error('Failed to sign in');
+    if (DEVELOPMENT_MODE) {
+        console.log('Development mode: returning dummy user for sign-in');
+        return {
+            id: 1234,
+            market_card_number: 12345678,
+            first_name: 'Tester',
+            last_name: 'User',
+            email: 'tester@example.com',
+            token: 'dummy-token'
         }
+    };
 
-        const data = await response.json();
-        return data as User;
-        
-    } catch (error) {
-        console.error('Error signing in:', error);
-        throw error;
-    }
+    console.log('Attempting to sign in user with email:', values.email);
+    return await
+        callAPI({ values: values, endpoint: 'sign-in' })
+            .then(res => res as User)
+            .catch(e => { console.error('Error signing in:', e); throw new Error(e) })
+
+
 };
 
 const handleGoogleSignIn = async (googleUser: any): Promise<string> => {
-    return ''; 
+    return '';
     // https://dev.to/yhoungbrown/google-sign-in-in-react-native-expo-a-practical-production-ready-guide-5g48;
 };
 
 const handleAppleSignIn = async (): Promise<string> => {
-    return ''; 
+    return '';
     // https://dev.to/yhoungbrown/apple-sign-in-in-react-native-expo-a-practical-production-ready-guide-5g48;
 };
