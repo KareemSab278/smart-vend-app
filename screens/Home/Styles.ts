@@ -57,6 +57,90 @@ const styles = StyleSheet.create({
     right: 24,
     flexDirection: 'row',
   },
+
+  // user modal
+  viewMode: {
+        alignItems: 'center',
+        gap: 6,
+    },
+    avatarLarge: {
+        width: 72,
+        height: 72,
+        borderRadius: 36,
+        backgroundColor: '#481186',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    avatarLargeText: {
+        color: '#fff',
+        fontSize: 32,
+        fontWeight: '700',
+    },
+    name: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#111',
+    },
+    email: {
+        fontSize: 14,
+        color: '#666',
+    },
+    card: {
+        fontSize: 13,
+        color: '#999',
+        marginBottom: 12,
+    },
+    editButton: {
+        width: '100%',
+        paddingVertical: 12,
+        borderRadius: 8,
+        backgroundColor: '#481186',
+        alignItems: 'center',
+        marginTop: 8,
+    },
+    editButtonText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 15,
+    },
+    
+    editTitle: {
+        fontSize: 20,
+        fontWeight: '700',
+        marginBottom: 16,
+        color: '#111',
+    },
+    editActions: {
+        flexDirection: 'row',
+        gap: 10,
+        marginTop: 8,
+    },
+    saveButton: {
+        flex: 1,
+        paddingVertical: 12,
+        borderRadius: 8,
+        backgroundColor: '#481186',
+        alignItems: 'center',
+    },
+    saveButtonText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 15,
+    },
+    cancelButton: {
+        flex: 1,
+        paddingVertical: 12,
+        borderRadius: 8,
+        borderWidth: 1.5,
+        borderColor: '#aaa',
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#555',
+        fontWeight: '600',
+        fontSize: 15,
+    },
   
 });
 

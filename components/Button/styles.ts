@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   },
   secondaryButton: {
     marginTop: 15,
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 16,
     width: '100%',
     borderRadius: 8,
@@ -20,6 +20,27 @@ export const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#aaa',
     alignItems: 'center',
+  },
+  avatarButton: {
+    position: 'absolute',
+    bottom: 28,
+    left: 20,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: '#481186a2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+  },
+  avatarText: {
+    color: '#ffffffa4',
+    fontSize: 26,
+    fontWeight: '900',
   },
   searchToggleButton: {
     marginTop: 15,
@@ -86,6 +107,20 @@ export const styles = StyleSheet.create({
   linkText: {
     color: '#fff',
     fontWeight: '600',
+  },
+  signOutButton: {
+    width: '100%',
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#dc2626',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  signOutButtonText: {
+    color: '#dc2626',
+    fontWeight: '600',
+    fontSize: 15,
   },
   cartButton: {
     position: 'absolute',

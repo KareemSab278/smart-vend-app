@@ -10,6 +10,7 @@ import { CatalogueItemType } from '@/Types/Catalogue';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
+import { UserProfileModal } from './components/UserModal';
 import { styles } from './Styles';
 
 export default function HomeScreen() {
@@ -27,6 +28,7 @@ export default function HomeScreen() {
       fetchFavourites().then(setFavourites),
       fetchCatalogueData()
     ])
+    .catch(e => console.error('Error loading data:', e));
   };
 
   const addToCart = async (item: CatalogueItemType) => {
@@ -90,6 +92,9 @@ export default function HomeScreen() {
       </ScrollView>
 
       <CartButton cartItems={cart} onPress={handleCartPress} />
+      <UserProfileModal onUpdate={(values) => {
+        // Handle user profile update
+      }} />
     </View>
   );
 }

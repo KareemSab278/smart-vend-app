@@ -98,6 +98,7 @@ const SignInStyles = StyleSheet.create({
   },
   statusMessage: {
     marginTop: 18,
+    marginBottom: 18,
     fontSize: 14,
     color: '#444',
     textAlign: 'center',

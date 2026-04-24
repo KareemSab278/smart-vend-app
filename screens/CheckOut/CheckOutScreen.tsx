@@ -1,5 +1,6 @@
 import { MainButton, SecondaryButton } from "@/components/Button";
 import { CameraComponent } from "@/components/Camera";
+import { LoadingComponent } from "@/components/Loading";
 import AppModal from "@/components/Modal";
 import { fetchNewPin } from "@/helpers/fetchNewPin";
 import { CartStorage } from "@/store/Storage";
@@ -120,8 +121,6 @@ export const CheckOutScreen = () => {
                 }
             />
 
-
-
             {/* PIN MODAL */}
             <AppModal
                 animationType="slide"
@@ -129,22 +128,26 @@ export const CheckOutScreen = () => {
                 visible={activeModal === 'pin'}
                 children={
                     <>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                            {
-                                pinDigits.map((digit, index) => {
-                                    const animation = pinAnimations.current[index] ?? new Animated.Value(0);
-                                    const pinStyle = [styles.pinText, { opacity: animation, transform: [{ translateX: animation.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }] }];
-                                    return (
-                                        <Animated.Text
-                                            key={index}
-                                            style={pinStyle}
-                                        >
-                                            {digit}
-                                        </Animated.Text>
-                                    );
-                                })
-                            }
-                        </View>
+                        {loadingPin ? (<LoadingComponent />)
+                            :
+                            (
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                    {
+                                        pinDigits.map((digit, index) => {
+                                            const animation = pinAnimations.current[index] ?? new Animated.Value(0);
+                                            const pinStyle = [styles.pinText, { opacity: animation, transform: [{ translateX: animation.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }] }];
+                                            return (
+                                                <Animated.Text
+                                                    key={index}
+                                                    style={pinStyle}
+                                                >
+                                                    {digit}
+                                                </Animated.Text>
+                                            );
+                                        })
+                                    }
+                                </View>
+                            )}
                         <SecondaryButton
                             title="Use Camera Instead"
                             onPress={() => { setActiveModal('camera'); setReceivedPin(null); }}

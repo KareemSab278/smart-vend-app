@@ -7,6 +7,12 @@ export interface User { // fields are required. if any missing then refuse app u
     token: string;
 }
 
+export interface UserProfileEditValues {
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 export interface SignUpValues {
   first_name: string;
   last_name: string;

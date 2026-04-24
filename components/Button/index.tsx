@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
-export { CartButton, FiltersButton, MainButton, SearchToggleButton, SecondaryButton };
+export { CartButton, FiltersButton, MainButton, SearchToggleButton, SecondaryButton, SignOutButton, UserButton };
 
 const MainButton = ({ title, onPress }: ButtonProps) => (
   <TouchableOpacity style={styles.appButton} onPress={onPress}>
@@ -71,13 +71,27 @@ const CartButton = ({ cartItems, onPress }: { cartItems: OrderItem[], onPress?: 
                 {cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0}
               </Text>
             </View>
-            
+
           </TouchableOpacity>
         </Animated.View>
       )}
     </>
   )
 }
+
+const UserButton = ({ title, onPress }: ButtonProps) => {
+  return (
+    <TouchableOpacity style={styles.avatarButton} onPress={onPress}>
+      <Text style={styles.avatarText}>{title}</Text>
+    </TouchableOpacity>
+  )
+}
+
+const SignOutButton = ({ onPress }: { onPress?: () => void }) => (
+  <TouchableOpacity style={styles.signOutButton} onPress={onPress}>
+    <Text style={styles.signOutButtonText}>Sign Out</Text>
+  </TouchableOpacity>
+);
 
 interface ButtonProps {
   title: string;

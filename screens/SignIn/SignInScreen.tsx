@@ -1,3 +1,5 @@
+import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
+import AppModal from '@/components/Modal';
 import { signInUser } from '@/helpers/signInUser';
 import { signUpUser } from '@/helpers/signUpUser';
 import { checkUser } from '@/Security/checkUser';
@@ -21,33 +23,41 @@ import { SignInStyles } from './Styles';
 export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 'login' | 'register' }) {
   const router = useRouter();
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
-  const [statusMessage, setStatusMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
-  useEffect(() => { (async () => { await checkUser().then(auth => auth && router.replace('/') ) })() }, [router]);
+  useEffect(() => { (async () => { await checkUser().then(auth => auth && router.replace('/')) })() }, [router]);
 
   const handleSignIn = async ({ email, password }: SignInValues) => {
     try {
+      setLoading(true);
       const user: User = await signInUser({ email: email, password: password });
       await UserStorage.saveUser(user);
-      setStatusMessage(`Welcome back, ${user.first_name}!`);
+      setStatusMessage(`Signing you in`);
       setTimeout(() => {
         router.replace('/');
       }, 1500);
     } catch {
-      setStatusMessage('Sign in failed. Please check your credentials and try again.');
+      setError(true);
+    } finally {
+      setTimeout(() => setLoading(false), 2000);
     }
   };
 
   const handleRegister = async (data: SignUpValues) => {
     try {
+      setLoading(true);
       const user = await signUpUser(data) as unknown as User;
       await UserStorage.saveUser(user);
-      setStatusMessage(`Welcome, ${user.first_name}!`);
+      setStatusMessage(`Registering your account`);
       setTimeout(() => {
         router.replace('/');
       }, 1500);
     } catch {
-      setStatusMessage('Sign up failed. Please check your details and try again.');
+      setError(true);
+    } finally {
+      setTimeout(() => setLoading(false), 2000);
     }
   };
 
@@ -57,7 +67,7 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <IfUserSignedIn goTo="/" />
-      
+
       <ScrollView contentContainerStyle={SignInStyles.container} keyboardShouldPersistTaps="handled">
         <View style={SignInStyles.header}>
           <Text style={SignInStyles.title}>{mode === 'login' ? 'Welcome back' : 'Create your account'}</Text>
@@ -89,7 +99,14 @@ export default function SignInScreen({ initialMode = 'login' }: { initialMode?: 
           )}
         </View>
 
-        {statusMessage ? <Text style={SignInStyles.statusMessage}>{statusMessage}</Text> : null}
+        <AppModal visible={error} onClose={() => setError(false)}>
+          <SomethingWentWrong />
+        </AppModal>
+
+        <AppModal visible={loading}>
+          <LoadingComponent />
+          {statusMessage && <Text style={SignInStyles.statusMessage}>{statusMessage}</Text>}
+        </AppModal>
       </ScrollView>
     </KeyboardAvoidingView>
   );
