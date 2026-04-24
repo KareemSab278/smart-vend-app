@@ -1,5 +1,6 @@
 import { CartButton } from '@/components/Button';
 import { HorizontalItemCard } from '@/components/CatalogueItem';
+import { LoadingComponent } from '@/components/Loading';
 import { fetchCatalogueData } from '@/helpers/fetchCatalogue';
 import { fetchFavourites } from '@/helpers/fetchFavourites';
 import { fetchOrderHistory } from '@/helpers/fetchOrderHistory';
@@ -17,10 +18,12 @@ export default function HomeScreen() {
   const [cart, setCart] = useState<OrderItem[]>([]);
   const [previouslyOrdered, setPreviouslyOrdered] = useState<CatalogueItemType[]>([]);
   const [favourites, setFavourites] = useState<CatalogueItemType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const user = useRef<User | null>(null);
   const router = useRouter();
 
   const loadData = async () => {
+    setLoading(true);
     await Promise.all([
       UserStorage.getUser().then(u => user.current = u as User),
       CartStorage.getCart().then(c => setCart(c as OrderItem[])),
@@ -28,7 +31,8 @@ export default function HomeScreen() {
       fetchFavourites().then(setFavourites),
       fetchCatalogueData()
     ])
-    .catch(e => console.error('Error loading data:', e));
+      .catch(e => console.error('Error loading data:', e));
+    setLoading(false);
   };
 
   const addToCart = async (item: CatalogueItemType) => {
@@ -56,6 +60,7 @@ export default function HomeScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>You Previously Ordered</Text>
+          {loading && previouslyOrdered.length < 1 && <LoadingComponent />}
           {previouslyOrdered.length > 0 ? (
             <FlatList
               data={previouslyOrdered}
@@ -67,12 +72,15 @@ export default function HomeScreen() {
                 <HorizontalItemCard item={item} onPress={() => addToCart(item as CatalogueItemType)} />
               )}
             />
-          ) : (<Text style={styles.emptyText}>No previous orders yet.</Text>)
+          ) : (
+            !loading && <Text style={styles.emptyText}>No previous orders yet.</Text>
+          )
           }
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Your Favourites</Text>
+          {loading && favourites.length < 1 && <LoadingComponent />}
           {favourites.length > 0 ? (
             <FlatList
               data={favourites}
@@ -85,7 +93,7 @@ export default function HomeScreen() {
               )}
             />
           ) : (
-            <Text style={styles.emptyText}>No favourites found yet.</Text>
+            !loading && <Text style={styles.emptyText}>No favourites found yet.</Text>
           )}
         </View>
 
