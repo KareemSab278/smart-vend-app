@@ -13,7 +13,7 @@ export type CatalogueItemType = {
   halal?: boolean;
   vegan?: boolean;
   vegetarian?: boolean;
-  type?: 'drink' | 'snack' | 'other' | 'food' | 'sandwich' | 'dessert' | string;
+  type?: 'drink' | 'snack' | 'other' | 'food' | 'sandwich' | 'dessert' | 'hot_drink' |string;
   [key: string]: unknown;
 };
 

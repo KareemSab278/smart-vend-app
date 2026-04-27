@@ -1,6 +1,6 @@
+import { CatalogueItemData } from '@/ApiCallers/fetchCatalogue';
 import { CatalogueItem } from '@/components/CatalogueItem';
 import { SearchBar } from '@/components/SearchBar';
-import { CatalogueItemData } from '@/helpers/fetchCatalogue';
 import { OrderItem } from '@/store/StorageHelpers';
 import { useMemo, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';

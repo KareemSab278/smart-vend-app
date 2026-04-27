@@ -1,6 +1,6 @@
+import { SignInValues } from '@/Types/User';
 import { MainButton } from '@/components/Button';
 import { InputField } from '@/components/InputField';
-import { SignInValues } from '@/helpers/signInUser';
 import { useState } from 'react';
 import { ActivityIndicator, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { LogInStyles } from './Styles';

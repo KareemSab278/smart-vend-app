@@ -103,7 +103,7 @@ const UserStorage = {
         } catch (e) {
             console.error('Error clearing user:', e);
         }
-    }
+    },
 }
 
 const CartStorage = {
@@ -213,5 +213,5 @@ const catalogueStorage = {
 }
 
 
-export { CartStorage, catalogueStorage, Storage, User, UserStorage };
+export { CartStorage, catalogueStorage, Storage, UserStorage };
 

@@ -13,6 +13,7 @@ type InputFieldProps = {
   helperText?: string;
   error?: boolean;
   autoCapitalize?: ComponentProps<typeof TextInput>['autoCapitalize'];
+  placeholder?: string;
 };
 
 const InputField = ({
@@ -24,6 +25,7 @@ const InputField = ({
   helperText,
   error,
   autoCapitalize = 'none',
+  placeholder,
 }: InputFieldProps) => (
   <View style={styles.fieldContainer}>
     <TextInput

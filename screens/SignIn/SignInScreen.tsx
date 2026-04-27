@@ -1,11 +1,11 @@
+import { signInUser } from '@/ApiCallers/signInUser';
+import { signUpUser } from '@/ApiCallers/signUpUser';
 import { LoadingComponent, SomethingWentWrong } from '@/components/Loading';
 import AppModal from '@/components/Modal';
-import { signInUser } from '@/helpers/signInUser';
-import { signUpUser } from '@/helpers/signUpUser';
 import { checkUser } from '@/Security/checkUser';
 import { IfUserSignedIn } from '@/Security/signInCheck';
-import { User, UserStorage } from '@/store/Storage';
-import { SignInValues, SignUpValues } from '@/Types/User';
+import { UserStorage } from '@/store/Storage';
+import { SignInValues, SignUpValues, User } from '@/Types/User';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {

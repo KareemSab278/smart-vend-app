@@ -92,10 +92,6 @@ function HorizontalItemCard({ item, onPress }: { item: CatalogueItemType; onPres
       )}
       <Text style={styles.hCardName} numberOfLines={2}>{item.name}</Text>
       <Text style={styles.hCardPrice}>£{item.price.toFixed(2)}</Text>
-      <View style={styles.hCardAddRow}>
-        <MaterialCommunityIcons name="cart-plus" size={14} color="#773eb9" />
-        <Text style={styles.hCardAddText}>Add to cart</Text>
-      </View>
     </TouchableOpacity>
   );
 }
@@ -201,7 +197,7 @@ const styles = StyleSheet.create({
     color: '#773eb9',
     fontWeight: '700',
     paddingHorizontal: 8,
-    paddingTop: 2,
+    paddingVertical: 2,
   },
   hCardAddRow: {
     flexDirection: 'row',

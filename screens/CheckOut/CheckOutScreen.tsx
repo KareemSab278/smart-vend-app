@@ -1,8 +1,8 @@
+import { fetchNewPayPin } from "@/ApiCallers/fetchNewPayPin";
 import { MainButton, SecondaryButton } from "@/components/Button";
 import { CameraComponent } from "@/components/Camera";
 import { LoadingComponent } from "@/components/Loading";
 import AppModal from "@/components/Modal";
-import { fetchNewPin } from "@/helpers/fetchNewPin";
 import { CartStorage } from "@/store/Storage";
 import { OrderItem } from "@/store/StorageHelpers";
 import { useRouter } from "expo-router";
@@ -24,7 +24,7 @@ export const CheckOutScreen = () => {
         if (!fetchPinCondition) return;
 
         setLoadingPin(true);
-        fetchPinCondition && fetchNewPin()
+        fetchPinCondition && fetchNewPayPin()
             .then((pin) => setReceivedPin(pin))
             .catch((error) => console.error("Failed to fetch new pin:", error))
             .finally(() => setLoadingPin(false));

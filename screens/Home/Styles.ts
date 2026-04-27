@@ -104,7 +104,11 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 15,
     },
-    
+    editSection:{
+      minHeight: 200,
+      maxHeight: 400,
+      overflowY: 'auto',
+    },
     editTitle: {
         fontSize: 20,
         fontWeight: '700',

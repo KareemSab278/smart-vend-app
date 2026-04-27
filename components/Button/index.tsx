@@ -1,6 +1,6 @@
 import { OrderItem } from '@/store/StorageHelpers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useEffect, useRef } from 'react';
+import { JSX, useEffect, useRef } from 'react';
 import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
@@ -94,6 +94,6 @@ const SignOutButton = ({ onPress }: { onPress?: () => void }) => (
 );
 
 interface ButtonProps {
-  title: string;
+  title: string | JSX.Element;
   onPress?: () => void;
 };

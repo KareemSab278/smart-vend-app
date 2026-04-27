@@ -1,5 +1,4 @@
-import { User } from "@/store/Storage";
-import { SignInValues } from "@/Types/User";
+import { SignInValues, User } from "@/Types/User";
 import { callAPI } from "./callAPI";
 
 
@@ -12,11 +11,18 @@ export const signInUser = async (values: SignInValues): Promise<User> => {
         return {
             id: 1234,
             market_card_number: 12345678,
+            market_card_pin: 1234, // can be null in real API response
             first_name: 'Tester',
             last_name: 'User',
             email: 'tester@example.com',
-            token: 'dummy-token'
-        }
+            token: 'dummy-token',
+            address1: '123 Main St',
+            address2: 'Apt 4B',
+            city: 'Anytown',
+            county: 'Anycounty',
+            postcode: '12345',
+            phone: '555-1234',
+        } as User;
     };
 
     console.log('Attempting to sign in user with email:', values.email);

@@ -1,9 +1,9 @@
 
 
 // fake a fetch for receiving a 6 digit pin from the server
-export { fetchNewPin };
+export { fetchNewPayPin };
 
-const fetchNewPin = (): Promise<string> => {
+const fetchNewPayPin = (): Promise<string> => {
     return new Promise((resolve) => {
         setTimeout(() => {
             const newPin = Math.floor(100000 + Math.random() * 900000).toString();

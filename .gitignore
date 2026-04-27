@@ -47,6 +47,4 @@ app-example
 
 
 # bs
-/helpers/fakeCatalogueData.ts
-/helpers/fakeOrderHistoryData.ts
-/helpers/fakeFavorites.ts
+/ApiCallers/fakeCatalogueData.ts

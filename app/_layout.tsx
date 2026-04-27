@@ -9,8 +9,9 @@ import BottomNavigationBar from '@/components/BottomNavigation';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const bottomRoutes = [
-  { key: 'home', title: 'Home', focusedIcon: 'home', route: '/' },
+  { key: 'index', title: 'Home', focusedIcon: 'home', route: '/' },
   { key: 'catalogue', title: 'Catalogue', focusedIcon: 'food', route: '/catalogue' },
+  { key: 'account', title: 'Account', focusedIcon: 'account', route: '/account' },
 ];
 
 const hiddenRoutes = ['sign-in', 'sign-up', 'checkout'];
@@ -28,7 +29,8 @@ export default function RootLayout() {
   const handleIndexChange = (newIndex: number) =>
     router.push((bottomRoutes[newIndex].route || '/') as RelativePathString);
 
-  const SCREENS = ['index', 'catalogue', 'sign-in', 'checkout'];
+  // const SCREENS = ['index', 'sign-in', 'checkout'];
+    const SCREENS = [...bottomRoutes.map(route => route.key), 'sign-in', 'checkout'];
 
   return (
     <PaperProvider>
