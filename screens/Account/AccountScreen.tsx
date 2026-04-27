@@ -242,7 +242,7 @@ export default function AccountScreen() {
                         /></View>
 
                         <View style={styles.cardOption}><MainButton
-                            title={hasPin ? 'Change PIN' : 'Add PIN'}
+                            title={hasPin ? 'Edit PIN' : 'Add PIN'}
                             onPress={() => setPinVisible(true)}
                         /></View>
 

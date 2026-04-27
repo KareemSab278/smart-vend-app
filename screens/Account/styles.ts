@@ -24,7 +24,6 @@ export const styles = StyleSheet.create({
     },
     cardOption: {
         maxWidth: '35%',
-        paddingVertical: 2
     },
     pinDigit: {
         fontSize: 26,

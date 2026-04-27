@@ -5,7 +5,7 @@ import { UserStorage } from '@/store/Storage';
 import { User } from '@/Types/User';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { userModalStyles } from '../styles';
 
 type Props = {
@@ -28,21 +28,7 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
     const [user, setUser] = useState<User | null>(null);
     const [visible, setVisible] = useState(false);
     const [editing, setEditing] = useState(false);
-    const [editValues, setEditValues] = useState<User>({
-        id: 0,
-        market_card_number: 0,
-        first_name: '',
-        last_name: '',
-        email: '',
-        address1: '',
-        address2: '',
-        city: '',
-        county: '',
-        postcode: '',
-        phone: '',
-        token: '',
-        market_card_pin: undefined,
-    });
+    const [editValues, setEditValues] = useState<User>({} as User);
     const router = useRouter();
 
     const loadUserData = async () => {
@@ -51,11 +37,8 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
             if (!storedUser?.id) {
                 return;
             }
-
             setUser(storedUser);
-
-            const accountDetails = await UserStorage.getUser();
-            setEditValues(accountDetails as User);
+            setEditValues(storedUser as User);
         } catch (e) {
             console.error('Error loading user account details:', e);
         }
@@ -115,7 +98,7 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
                 ) : (
                     <View>
                         <Text style={userModalStyles.editTitle}>Edit Profile</Text>
-                        <View style={userModalStyles.editSection}>
+                        <ScrollView style={userModalStyles.editSection}>
                             {editInputFields.map(input => (
                                 <InputField
                                     key={input.valueKey}
@@ -125,7 +108,7 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
                                     keyboardType={input.valueKey === 'email' ? 'email-address' : 'default'}
                                 />
                             ))}
-                        </View>
+                        </ScrollView>
                         <View style={userModalStyles.editActions}>
                             <MainButton title="Save" onPress={handleSave} />
                         </View>
