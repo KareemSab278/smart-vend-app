@@ -5,11 +5,11 @@ import { fetchCatalogueData } from '@/helpers/fetchCatalogue';
 import { fetchFavourites } from '@/helpers/fetchFavourites';
 import { fetchOrderHistory } from '@/helpers/fetchOrderHistory';
 import { IfUserNotSignedIn } from '@/Security/signInCheck';
-import { CartStorage, User, UserStorage } from '@/store/Storage';
+import { CartStorage } from '@/store/Storage';
 import { OrderItem } from '@/store/StorageHelpers';
 import { CatalogueItemType } from '@/Types/Catalogue';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import { UserProfileModal } from './homeComponents/UserModal';
 import { styles } from './Styles';
@@ -19,13 +19,11 @@ export default function HomeScreen() {
   const [previouslyOrdered, setPreviouslyOrdered] = useState<CatalogueItemType[]>([]);
   const [favourites, setFavourites] = useState<CatalogueItemType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const user = useRef<User | null>(null);
   const router = useRouter();
 
   const loadData = async () => {
     setLoading(true);
     await Promise.all([
-      UserStorage.getUser().then(u => user.current = u as User),
       CartStorage.getCart().then(c => setCart(c as OrderItem[])),
       fetchOrderHistory().then(setPreviouslyOrdered),
       fetchFavourites().then(setFavourites),
@@ -54,7 +52,7 @@ export default function HomeScreen() {
         <IfUserNotSignedIn goTo="/sign-in" />
 
         <View style={styles.header}>
-          {user.current && <Text style={styles.title}>Welcome Back, {user.current?.first_name}</Text>}
+          <Text style={styles.title}>Your Dashboard</Text>
           <Text style={styles.subtitle}>Explore our latest products and offers</Text>
         </View>
 
@@ -100,9 +98,7 @@ export default function HomeScreen() {
       </ScrollView>
 
       <CartButton cartItems={cart} onPress={handleCartPress} />
-      <UserProfileModal onUpdate={(values) => {
-        // Handle user profile update
-      }} />
+      <UserProfileModal onUpdate={loadData} />
     </View>
   );
 }

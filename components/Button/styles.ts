@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#481186a2',
+    backgroundColor: '#773eb9',
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 6,
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
   },
   avatarText: {
-    color: '#ffffffa4',
+    color: '#ffffff',
     fontSize: 26,
     fontWeight: '900',
   },

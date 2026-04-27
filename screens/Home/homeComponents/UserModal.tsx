@@ -9,7 +9,7 @@ import { Text, View } from 'react-native';
 import { styles } from '../Styles';
 
 type Props = {
-    onUpdate: (values: UserProfileEditValues) => void;
+    onUpdate?: ((values: UserProfileEditValues) => void) | null;
 };
 
 export const UserProfileModal = ({ onUpdate }: Props) => {
@@ -19,7 +19,7 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
     const [editValues, setEditValues] = useState<UserProfileEditValues>({
         first_name: '',
         last_name: '',
-        email: '',
+        email: ''
     });
     const router = useRouter();
 
@@ -41,11 +41,16 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
         router.replace('/sign-in');
     };
 
-    const handleSave = () => {
-        onUpdate(editValues);
+    const handleSave = async () => {
+        onUpdate && onUpdate(editValues);
+
         if (user) {
             setUser({ ...user, ...editValues });
         }
+
+        await UserStorage.saveUser({ ...user, ...editValues } as User)
+            .catch(e => console.error('Error saving user data:', e));
+
         setEditing(false);
     };
 
@@ -58,51 +63,51 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
 
     return (
         <>
-        <UserButton title={initial} onPress={openModal} />
+            <UserButton title={initial} onPress={openModal} />
 
-        <AppModal visible={visible} onClose={() => setVisible(false)} animationType="fade">
-            {!editing ? (
-                <View style={styles.viewMode}>
-                    <View style={styles.avatarLarge}>
-                        <Text style={styles.avatarLargeText}>{initial}</Text>
+            <AppModal visible={visible} onClose={() => setVisible(false)} animationType="fade">
+                {!editing ? (
+                    <View style={styles.viewMode}>
+                        <View style={styles.avatarLarge}>
+                            <Text style={styles.avatarLargeText}>{initial}</Text>
+                        </View>
+                        <Text style={styles.name}>{user?.first_name} {user?.last_name}</Text>
+                        <Text style={styles.email}>{user?.email}</Text>
+                        <Text style={styles.card}>Card #{user?.market_card_number}</Text>
+
+                        <SecondaryButton title="Edit Profile" onPress={() => setEditing(true)} />
+
+                        <SignOutButton onPress={handleSignOut} />
+
                     </View>
-                    <Text style={styles.name}>{user?.first_name} {user?.last_name}</Text>
-                    <Text style={styles.email}>{user?.email}</Text>
-                    <Text style={styles.card}>Card #{user?.market_card_number}</Text>
-
-                    <SecondaryButton title="Edit Profile" onPress={() => setEditing(true)} />
-
-                    <SignOutButton onPress={handleSignOut} />
-
-                </View>
-            ) : (
-                <View>
-                    <Text style={styles.editTitle}>Edit Profile</Text>
-                    <InputField
-                        label="First Name"
-                        value={editValues.first_name}
-                        onChangeText={v => setEditValues(prev => ({ ...prev, first_name: v }))}
-                        autoCapitalize="words"
-                    />
-                    <InputField
-                        label="Last Name"
-                        value={editValues.last_name}
-                        onChangeText={v => setEditValues(prev => ({ ...prev, last_name: v }))}
-                        autoCapitalize="words"
-                    />
-                    <InputField
-                        label="Email"
-                        value={editValues.email}
-                        onChangeText={v => setEditValues(prev => ({ ...prev, email: v }))}
-                        keyboardType="email-address"
-                    />
-                    <View style={styles.editActions}>
-                        <MainButton title="Save" onPress={handleSave} />
-                    </View>
+                ) : (
+                    <View>
+                        <Text style={styles.editTitle}>Edit Profile</Text>
+                        <InputField
+                            label="First Name"
+                            value={editValues.first_name}
+                            onChangeText={v => setEditValues(prev => ({ ...prev, first_name: v }))}
+                            autoCapitalize="words"
+                        />
+                        <InputField
+                            label="Last Name"
+                            value={editValues.last_name}
+                            onChangeText={v => setEditValues(prev => ({ ...prev, last_name: v }))}
+                            autoCapitalize="words"
+                        />
+                        <InputField
+                            label="Email"
+                            value={editValues.email}
+                            onChangeText={v => setEditValues(prev => ({ ...prev, email: v }))}
+                            keyboardType="email-address"
+                        />
+                        <View style={styles.editActions}>
+                            <MainButton title="Save" onPress={handleSave} />
+                        </View>
                         <SecondaryButton title="Cancel" onPress={handleCancelEdit} />
-                </View>
-            )}
-        </AppModal>
+                    </View>
+                )}
+            </AppModal>
         </>
     );
 }
