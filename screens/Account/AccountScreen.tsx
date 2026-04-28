@@ -1,3 +1,4 @@
+import { fetchAndSaveUserInfoToCache } from '@/ApiCallers/fetchAndSaveUserInfoToCache';
 import { fetchUserPin } from '@/ApiCallers/fetchUserPin';
 import { makeStripeTopUp } from '@/ApiCallers/makeStripeTopUp';
 import { saveCardNumber } from '@/ApiCallers/saveCardNumber';
@@ -10,8 +11,8 @@ import { IfUserNotSignedIn } from '@/Security/signInCheck';
 import { UserStorage } from '@/store/Storage';
 import { User } from '@/Types/User';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Animated, Easing, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SetCardNumModal } from './accountComponents/setCardNumModal';
 import { SetPinModal } from './accountComponents/SetPinModal';
@@ -20,9 +21,26 @@ import { UserProfileModal } from './accountComponents/UserModal';
 import { styles } from './styles';
 
 const HOT_DRINKS_GOAL = 8;
+const BASE_USER = {
+    id: 0,
+    first_name: '',
+    last_name: '',
+    email: '',
+    token: '',
+    address1: '',
+    city: '',
+    county: '',
+    postcode: '',
+    phone: '',
+    market_card_number: '',
+    market_card_pin: null,
+    market_card_balance: 0,
+    hot_drinks_count: 0,
+    free_drinks: 0,
+} as User;
 
 export default function AccountScreen() {
-    const [user, setUser] = useState<User>(null as unknown as User);
+    const [user, setUser] = useState<User>(BASE_USER);
     const router = useRouter();
     const [loading, setLoading] = useState(true);
 
@@ -95,8 +113,7 @@ export default function AccountScreen() {
     const loadData = async () => {
         setLoading(true);
         await Promise.all([
-            UserStorage.getUser()
-                .then(u => setUser(u as User)),
+            fetchAndSaveUserInfoToCache().then(() => UserStorage.getUser().then(u => setUser(u as User))),
         ]).catch(e => console.error('Error loading account data:', e));
         setLoading(false);
     };
@@ -121,12 +138,7 @@ export default function AccountScreen() {
                 .finally(() => setLoading(false));
     };
 
-
     useEffect(() => { loadData() }, []);
-
-    useFocusEffect(
-        useCallback(() => { loadData(); }, [])
-    );
 
     useEffect(() => {
         if (!revealedPin) {
@@ -254,27 +266,23 @@ export default function AccountScreen() {
 
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Hot Drinks</Text>
+                    <View style={styles.loyaltyCard}>
+                        <View style={styles.loyaltyRow}>
+                            <Text style={styles.loyaltyCount}>
+                                <MaterialCommunityIcons name="coffee" size={24} color="#481186" /> {hotCount} / {HOT_DRINKS_GOAL}
+                            </Text>
+                        </View>
+                        <Text style={styles.loyaltyHint}>
+                            ({HOT_DRINKS_GOAL - hotCount} more to go)
+                        </Text>
+                        <Progress progress={progress} color="purple" />
+                    </View>
 
-                    {hasFree ? (
-                        <View style={styles.freeDrinkBanner}>
-                            <Text style={styles.freeDrinkText}>
-                                You have a free hot drink! Redeem it at the machine.
-                            </Text>
-                        </View>
-                    ) : (
-                        <View style={styles.loyaltyCard}>
-                            <View style={styles.loyaltyRow}>
-                                <Text style={styles.loyaltyCount}>
-                                    <MaterialCommunityIcons name="coffee" size={24} color="#481186" /> {hotCount} / {HOT_DRINKS_GOAL}
-                                </Text>
-                            </View>
-                            <Text style={styles.loyaltyHint}>
-                                ({HOT_DRINKS_GOAL - hotCount} more to go)
-                            </Text>
-                            <Progress progress={progress} color="purple" />
-                        </View>
-                    )}
+                    {hasFree && <View style={styles.freeDrinkBanner}>
+                        <Text style={styles.freeDrinkText}>
+                            <MaterialCommunityIcons name="coffee" size={14} color="#023b00" />
+                            {` You have ${user.free_drinks} free hot drink${user.free_drinks > 1 ? 's' : ''}!`}
+                        </Text></View>}
                 </View>
 
             </ScrollView>

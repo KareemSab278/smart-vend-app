@@ -1,3 +1,5 @@
+
+// designed User to be single source of truth for all app at all times
 export interface User extends marketCard { // fields are required. if any missing then refuse app use or sign in/sign up!
     id: number;
     first_name: string;
@@ -13,7 +15,7 @@ export interface User extends marketCard { // fields are required. if any missin
 }
 
 interface marketCard {
-  market_card_number: number;
+  market_card_number: number | string;
   market_card_pin: number | null;
   market_card_balance: number | 0; // balance can be 0 but not null!!!!!!!!
   hot_drinks_count: number | 0; // can be 0 but not null!!!!!!!!

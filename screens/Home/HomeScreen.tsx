@@ -41,7 +41,6 @@ export default function HomeScreen() {
 
   const handleCartPress = () => router.push('/catalogue?openCart=true');
 
-
   useEffect(() => { loadData() }, []);
 
   return (

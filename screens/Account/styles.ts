@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
     },
-    cardActions:{
+    cardActions: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -115,8 +115,8 @@ export const styles = StyleSheet.create({
         borderRadius: 12,
         padding: 16,
         gap: 10,
-        width: '90%',
         alignSelf: 'center',
+        width: '100%',
     },
     loyaltyRow: {
         flexDirection: 'row',
@@ -138,11 +138,15 @@ export const styles = StyleSheet.create({
         padding: 16,
         borderLeftWidth: 4,
         borderLeftColor: '#28a745',
+        alignSelf: 'center',
+        width: '100%',
+        marginTop: 12,
     },
     freeDrinkText: {
         fontSize: 15,
         color: '#155724',
         fontWeight: '600',
+        textAlign: 'center',
     },
 });
 

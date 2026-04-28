@@ -10,7 +10,7 @@ export const signInUser = async (values: SignInValues): Promise<User> => {
         console.log('Development mode: returning dummy user for sign-in');
         return {
             id: 1234,
-            market_card_number: 12345678,
+            market_card_number: 123456789000,
             market_card_pin: 1234, // can be null in real API response
             market_card_balance: 5.80, // can be 0 in real API response but not null
             first_name: 'Tester',
@@ -23,6 +23,8 @@ export const signInUser = async (values: SignInValues): Promise<User> => {
             county: 'Anycounty',
             postcode: '12345',
             phone: '555-1234',
+            hot_drinks_count: 3, 
+            free_drinks: 2
         } as User;
     };
 
@@ -31,8 +33,6 @@ export const signInUser = async (values: SignInValues): Promise<User> => {
         callAPI({ values: values, endpoint: 'sign-in' })
             .then(res => res as User)
             .catch(e => { console.error('Error signing in:', e); throw new Error(e) })
-
-
 };
 
 const handleGoogleSignIn = async (googleUser: any): Promise<string> => {
