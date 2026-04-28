@@ -1,5 +1,5 @@
-import { fetchAndSaveUserInfoToCache } from "@/ApiCallers/fetchAndSaveUserInfoToCache";
 import { checkUser } from "@/Security/checkUser";
+import { UserStorage } from "@/store/Storage";
 import { RelativePathString, useRouter } from "expo-router";
 import { useEffect } from "react";
 
@@ -18,13 +18,11 @@ export const IfUserNotSignedIn = ({ goTo }: { goTo: string }) => {
         if (!isSignedIn) {
             router.replace(goTo as RelativePathString);
         } else {
-            await fetchAndSaveUserInfoToCache();
+            await UserStorage.getUser()
         }
     };
 
-    useEffect(() => {
-        checkUser();
-    }, []);
+    useEffect(() => { checkUser() }, []);
 
     return null;
 }

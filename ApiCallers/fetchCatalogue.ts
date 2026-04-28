@@ -2,7 +2,6 @@ import { catalogueStorage } from "@/store/Storage";
 import { CatalogueItemType } from '@/Types/Catalogue';
 import { fakeCatalogueData } from "./fakeCatalogueData";
 
-
 const fetchCatalogueData = async (): Promise<CatalogueItemType[]> => {
   // get fresh catalogue when this fn is called and save to cache
   console.log('Fetching catalogue data...');

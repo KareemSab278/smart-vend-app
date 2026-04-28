@@ -21,26 +21,9 @@ import { UserProfileModal } from './accountComponents/UserModal';
 import { styles } from './styles';
 
 const HOT_DRINKS_GOAL = 8;
-const BASE_USER = {
-    id: 0,
-    first_name: '',
-    last_name: '',
-    email: '',
-    token: '',
-    address1: '',
-    city: '',
-    county: '',
-    postcode: '',
-    phone: '',
-    market_card_number: '',
-    market_card_pin: null,
-    market_card_balance: 0,
-    hot_drinks_count: 0,
-    free_drinks: 0,
-} as User;
 
 export default function AccountScreen() {
-    const [user, setUser] = useState<User>(BASE_USER);
+    const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
     const [loading, setLoading] = useState(true);
 
@@ -113,7 +96,8 @@ export default function AccountScreen() {
     const loadData = async () => {
         setLoading(true);
         await Promise.all([
-            fetchAndSaveUserInfoToCache().then(() => UserStorage.getUser().then(u => setUser(u as User))),
+            fetchAndSaveUserInfoToCache().then(() =>
+                UserStorage.getUser().then(u => setUser(u as User))),
         ]).catch(e => console.error('Error loading account data:', e));
         setLoading(false);
     };
@@ -238,11 +222,11 @@ export default function AccountScreen() {
                         )}
                     </View>
 
-                    <Text style={styles.cardNumber}>{String(user.market_card_number ?? '')}</Text>
+                    <Text style={styles.cardNumber}>{String(user?.market_card_number ?? '')}</Text>
 
                     <Text style={styles.balanceLabel}>Current Balance</Text>
                     <Text style={styles.balance}>
-                        £{(user.market_card_balance ?? 0).toFixed(2)}
+                        £{(user?.market_card_balance ?? 0).toFixed(2)}
                     </Text>
                     <View style={styles.cardActions}>
 
@@ -264,12 +248,12 @@ export default function AccountScreen() {
                     </View>
                 </View>
 
-
                 <View style={styles.section}>
                     <View style={styles.loyaltyCard}>
                         <View style={styles.loyaltyRow}>
+                            <MaterialCommunityIcons name="coffee" size={24} color="#481186" />
                             <Text style={styles.loyaltyCount}>
-                                <MaterialCommunityIcons name="coffee" size={24} color="#481186" /> {hotCount} / {HOT_DRINKS_GOAL}
+                                {hotCount} / {HOT_DRINKS_GOAL}
                             </Text>
                         </View>
                         <Text style={styles.loyaltyHint}>
@@ -278,11 +262,15 @@ export default function AccountScreen() {
                         <Progress progress={progress} color="purple" />
                     </View>
 
-                    {hasFree && <View style={styles.freeDrinkBanner}>
-                        <Text style={styles.freeDrinkText}>
+                    {hasFree && (
+                        <View style={styles.freeDrinkBanner}>
                             <MaterialCommunityIcons name="coffee" size={14} color="#023b00" />
-                            {` You have ${user.free_drinks} free hot drink${user.free_drinks > 1 ? 's' : ''}!`}
-                        </Text></View>}
+                            <Text style={styles.freeDrinkText}>
+                                You have {user?.free_drinks} free hot drink
+                                {user?.free_drinks && user?.free_drinks > 1 ? 's' : ''}!
+                            </Text>
+                        </View>
+                    )}
                 </View>
 
             </ScrollView>

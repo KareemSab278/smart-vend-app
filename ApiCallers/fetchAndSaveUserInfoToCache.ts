@@ -5,7 +5,6 @@ import { callAPI } from "./callAPI";
 const DEVELOPMENT_MODE = true;
 
 
-// this is for the user to fetch their data on page loads to ensure up to date info
 export const fetchAndSaveUserInfoToCache = async (): Promise<void> => {
     const currentUser = await UserStorage.getUser();
 
@@ -13,20 +12,19 @@ export const fetchAndSaveUserInfoToCache = async (): Promise<void> => {
         throw new Error('No user found in storage. Cannot fetch user info without a valid user ID.');
     }
 
-
     if (DEVELOPMENT_MODE) {
         console.log('Development mode: saving dummy user for fetchUserInfo');
         await UserStorage.saveUser(fakeUser as User);
-    } else {
-
-
-        console.log('Attempting to fetch user info for user ID:', currentUser.id);
-        const updatedUser = await
-            callAPI({ values: { user_id: currentUser.id }, endpoint: 'fetch-user-info' })
-                .then(res => res as User)
-                .catch(e => { console.error('Error fetching user info:', e); throw new Error(e) });
-        await UserStorage.saveUser(updatedUser).then(() => console.log('latest user info updated in storage'));
+        return;
     }
+
+
+    console.log('Attempting to fetch user info for user ID:', currentUser.id);
+    const updatedUser = await
+        callAPI({ values: { user_id: currentUser.id }, endpoint: 'fetch-user-info' })
+            .then(res => res as User)
+            .catch(e => { console.error('Error fetching user info:', e); throw new Error(e) });
+    await UserStorage.saveUser(updatedUser).then(() => console.log('latest user info updated in storage'));
 
 };
 
@@ -45,6 +43,6 @@ const fakeUser: User = {
     county: 'Anycounty',
     postcode: '12345',
     phone: '555-1234',
-    hot_drinks_count: 3,
+    hot_drinks_count: 4,
     free_drinks: 2
 };
