@@ -35,7 +35,7 @@ export const makeStripeTopUp = async (amount: number, currency = 'GBP'): Promise
     try {
         const response = await callAPI({
             values: {
-                ammount: amount,
+                amount: amount,
                 currency: currency.toLowerCase() // MUST BE GBP FOR STRIPE TO ACCEPT IT
             },
             endpoint: 'stripe-top-up',
