@@ -1,4 +1,3 @@
-import { FetchedMarketCard, fetchMarketCard, } from '@/ApiCallers/fetchMarketCard';
 import { fetchUserPin } from '@/ApiCallers/fetchUserPin';
 import { makeStripeTopUp } from '@/ApiCallers/makeStripeTopUp';
 import { saveCardNumber } from '@/ApiCallers/saveCardNumber';
@@ -23,9 +22,8 @@ import { styles } from './styles';
 const HOT_DRINKS_GOAL = 8;
 
 export default function AccountScreen() {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User>(null as unknown as User);
     const router = useRouter();
-    const [cardData, setCardData] = useState<FetchedMarketCard | null>(null);
     const [loading, setLoading] = useState(true);
 
     const [showPayResult, setShowPayResult] = useState(false);
@@ -99,7 +97,6 @@ export default function AccountScreen() {
         await Promise.all([
             UserStorage.getUser()
                 .then(u => setUser(u as User)),
-            fetchMarketCard().then(setCardData),
         ]).catch(e => console.error('Error loading account data:', e));
         setLoading(false);
     };
@@ -155,8 +152,8 @@ export default function AccountScreen() {
 
 
 
-    const hotCount = cardData?.hotDrinks.hot_drinks_count ?? 0;
-    const hasFree = cardData?.hotDrinks.has_free_drink ?? false;
+    const hotCount = user?.hot_drinks_count ?? 0;
+    const hasFree = user?.free_drinks ?? 0;
     const progress = Math.min(hotCount / HOT_DRINKS_GOAL, 1);
     const hasPin = !!user?.market_card_pin;
 
@@ -229,13 +226,11 @@ export default function AccountScreen() {
                         )}
                     </View>
 
-                    <Text style={styles.cardNumber}>
-                        **** {String(cardData?.marketCard.market_card_number ?? '').slice(-4)}
-                    </Text>
+                    <Text style={styles.cardNumber}>{String(user.market_card_number ?? '')}</Text>
 
                     <Text style={styles.balanceLabel}>Current Balance</Text>
                     <Text style={styles.balance}>
-                        £{(cardData?.marketCard.credit ?? 0).toFixed(2)}
+                        £{(user.market_card_balance ?? 0).toFixed(2)}
                     </Text>
                     <View style={styles.cardActions}>
 

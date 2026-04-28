@@ -12,6 +12,7 @@ export const signInUser = async (values: SignInValues): Promise<User> => {
             id: 1234,
             market_card_number: 12345678,
             market_card_pin: 1234, // can be null in real API response
+            market_card_balance: 5.80, // can be 0 in real API response but not null
             first_name: 'Tester',
             last_name: 'User',
             email: 'tester@example.com',
