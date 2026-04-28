@@ -11,7 +11,8 @@ import { IfUserNotSignedIn } from '@/Security/signInCheck';
 import { UserStorage } from '@/store/Storage';
 import { User } from '@/Types/User';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useEffect, useRef, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Animated, Easing, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SetCardNumModal } from './accountComponents/setCardNumModal';
 import { SetPinModal } from './accountComponents/SetPinModal';
@@ -23,6 +24,7 @@ const HOT_DRINKS_GOAL = 8;
 
 export default function AccountScreen() {
     const [user, setUser] = useState<User | null>(null);
+    const router = useRouter();
     const [cardData, setCardData] = useState<FetchedMarketCard | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -60,17 +62,19 @@ export default function AccountScreen() {
         setLoading(true);
         setTopUpVisible(false);
 
-        await makeStripeTopUp(amount)
-            .then(res => {
-                res.success && loadData();
-                payResMessage.current = res.message;
-                setShowPayResult(true);
-            })
-            .catch(e => {
-                payResMessage.current = e.message;
-                setShowPayResult(true);
-            })
-            .finally(() => setLoading(false));
+        const result = await makeStripeTopUp(amount);
+        setLoading(false);
+
+        if (!result.success || !result.client_secret) {
+            payResMessage.current = result.error ?? 'Failed to start payment.';
+            setShowPayResult(true);
+            return;
+        }
+
+        router.push({
+            pathname: '/payment' as never,
+            params: { client_secret: result.client_secret, amount: String(amount) },
+        });
     };
 
 
@@ -122,6 +126,10 @@ export default function AccountScreen() {
 
 
     useEffect(() => { loadData() }, []);
+
+    useFocusEffect(
+        useCallback(() => { loadData(); }, [])
+    );
 
     useEffect(() => {
         if (!revealedPin) {

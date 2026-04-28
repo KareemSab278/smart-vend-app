@@ -23,7 +23,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cardOption: {
-        maxWidth: '35%',
+        maxWidth: '40%',
+        // maxHeight: 50,
     },
     pinDigit: {
         fontSize: 26,

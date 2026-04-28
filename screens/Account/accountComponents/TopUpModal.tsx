@@ -54,11 +54,11 @@ export const TopUpModal = ({ visible, onClose, onTopUp }: Props) => {
                 value={amount}
                 onChangeText={handleAmountChange}
                 keyboardType="decimal-pad"
-                helperText={error || 'Min £1.00 — Max £100.00'}
+                helperText={error || 'Min £1.00 - Max £100.00'}
                 error={!!error}
             />
             <View style={styles.actions}>
-                <MainButton title="Pay with Stripe" onPress={handleConfirm} />
+                <MainButton title="Top Up" onPress={handleConfirm} />
                 <SecondaryButton title="Cancel" onPress={handleClose} />
             </View>
         </AppModal>

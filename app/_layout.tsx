@@ -6,6 +6,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import 'react-native-reanimated';
 
 import BottomNavigationBar from '@/components/BottomNavigation';
+import { StripeWrapper } from '@/components/StripeWrapper';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const bottomRoutes = [
@@ -13,8 +14,7 @@ const bottomRoutes = [
   { key: 'catalogue', title: 'Catalogue', focusedIcon: 'food', route: '/catalogue' },
   { key: 'account', title: 'Account', focusedIcon: 'account', route: '/account' },
 ];
-
-const hiddenRoutes = ['sign-in', 'sign-up', 'checkout'];
+const hiddenRoutes = ['sign-in', 'sign-up', 'checkout', 'payment'];
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -29,10 +29,10 @@ export default function RootLayout() {
   const handleIndexChange = (newIndex: number) =>
     router.push((bottomRoutes[newIndex].route || '/') as RelativePathString);
 
-  // const SCREENS = ['index', 'sign-in', 'checkout'];
-    const SCREENS = [...bottomRoutes.map(route => route.key), 'sign-in', 'checkout'];
+    const SCREENS = [...bottomRoutes.map(route => route.key), ...hiddenRoutes];
 
   return (
+    <StripeWrapper>
     <PaperProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <View style={{ flex: 1 }}>
@@ -56,5 +56,6 @@ export default function RootLayout() {
         <StatusBar style="auto" />
       </ThemeProvider>
     </PaperProvider>
+    </StripeWrapper>
   );
 }
