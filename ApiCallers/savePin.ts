@@ -1,7 +1,7 @@
 
-import { DEV_MODE } from "@/config";
 import { callAPI } from "./callAPI";
 
+const DEVELOPMENT_MODE = true;
 
 type Response = {
     success: boolean;
@@ -10,7 +10,7 @@ type Response = {
 
 export const savePin = async (pin: number, user_id: number): Promise<Response> => {
 
-    if (DEV_MODE()) {
+    if (DEVELOPMENT_MODE) {
         return { success: true };
     }
 

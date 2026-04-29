@@ -1,11 +1,12 @@
-import { DEV_MODE } from "@/config";
 import { SignInValues, User } from "@/Types/User";
 import { callAPI } from "./callAPI";
 
 
+const DEVELOPMENT_MODE = true;
+
 export const signInUser = async (values: SignInValues): Promise<User> => {
 
-    if (DEV_MODE()) {
+    if (DEVELOPMENT_MODE) {
         console.log('Development mode: returning dummy user for sign-in');
         return {
             id: 1234,
