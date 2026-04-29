@@ -35,6 +35,7 @@ export const CatalogueScreen = () => {
   const [cartModalOpen, setCartModalOpen] = useState<boolean>(false);
   const allOk = !loading && !error && catalogueData.length > 0;
 
+
   const getAndSetCatalogueData = async () => {
     setLoading(true);
     setError(false);
@@ -90,6 +91,9 @@ export const CatalogueScreen = () => {
     (params.openCart === 'true') && loadCartItems().then(() => setCartModalOpen(true));
   }, [params.openCart]);
 
+  useEffect(() => {
+    params.category_filter === 'drink' && setSelectedCategory('drink');
+  }, []);
 
 
   return (

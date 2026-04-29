@@ -5,7 +5,7 @@ import { UserStorage } from '@/store/Storage';
 import { User } from '@/Types/User';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Alert, ScrollView, Text, View } from 'react-native';
 import { userModalStyles } from '../styles';
 
 type Props = {
@@ -52,9 +52,11 @@ export const UserProfileModal = ({ onUpdate }: Props) => {
     };
 
     const handleSignOut = async () => {
-        await UserStorage.clearUser();
         setVisible(false);
-        router.replace('/sign-in');
+        Alert.alert('You\'re signing out', 'Are you sure you want to sign out?', [
+            { text: 'No', style: 'cancel' },
+            { text: 'Yes', onPress: async () => { setVisible(false); await UserStorage.clearUser(); router.replace('/sign-in'); } },
+        ]);
     };
 
     const handleSave = async () => {

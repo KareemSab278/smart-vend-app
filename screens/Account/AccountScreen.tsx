@@ -159,7 +159,9 @@ export default function AccountScreen() {
 
             <IfUserNotSignedIn goTo="/sign-in" />
 
-            <AppModal visible={loading}> <LoadingComponent /> </AppModal>
+            <AppModal visible={loading}>
+                <LoadingComponent />
+            </AppModal>
 
             {user?.market_card_pin && (
                 <PinReveal

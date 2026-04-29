@@ -121,8 +121,9 @@ export const styles = StyleSheet.create({
     },
     loyaltyRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        alignSelf: 'center',
+        gap: 8,
     },
     loyaltyCount: {
         fontSize: 27,
