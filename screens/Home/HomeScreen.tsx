@@ -45,7 +45,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.container}>
 
         <IfUserNotSignedIn goTo="/sign-in" />
 
@@ -55,48 +55,50 @@ export default function HomeScreen() {
         </View>
 
 
+        <ScrollView>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Favourites</Text>
-          {loading && favourites.length < 1 && <LoadingComponent />}
-          {favourites.length > 0 ? (
-            <FlatList
-              data={favourites}
-              keyExtractor={(item) => String(item.id)}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.hList}
-              renderItem={({ item }) => (
-                <HorizontalItemCard item={item} onPress={() => addToCart(item)} />
-              )}
-            />
-          ) : (
-            !loading && <Text style={styles.emptyText}>No favourites found yet.</Text>
-          )}
-        </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Your Favourites</Text>
+            {loading && favourites.length < 1 && <LoadingComponent />}
+            {favourites.length > 0 ? (
+              <FlatList
+                data={favourites}
+                keyExtractor={(item) => String(item.id)}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.hList}
+                renderItem={({ item }) => (
+                  <HorizontalItemCard item={item} onPress={() => addToCart(item)} />
+                )}
+              />
+            ) : (
+              !loading && <Text style={styles.emptyText}>No favourites found yet.</Text>
+            )}
+          </View>
 
 
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Your Order History</Text>
+            {loading && history.length < 1 && <LoadingComponent />}
+            {history.length > 0 ? (
+              <FlatList
+                data={history}
+                keyExtractor={(item) => String(item.id)}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.hList}
+                renderItem={({ item }) => (
+                  <HorizontalItemCard item={item} onPress={() => addToCart(item)} />
+                )}
+              />
+            ) : (
+              !loading && <Text style={styles.emptyText}>No order history found yet.</Text>
+            )}
+          </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Order History</Text>
-          {loading && history.length < 1 && <LoadingComponent />}
-          {history.length > 0 ? (
-            <FlatList
-              data={history}
-              keyExtractor={(item) => String(item.id)}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.hList}
-              renderItem={({ item }) => (
-                <HorizontalItemCard item={item} onPress={() => addToCart(item)} />
-              )}
-            />
-          ) : (
-            !loading && <Text style={styles.emptyText}>No order history found yet.</Text>
-          )}
-        </View>
+        </ScrollView>
 
-      </ScrollView>
+      </View>
 
       <CartButton cartItems={cart} onPress={handleCartPress} />
     </View>

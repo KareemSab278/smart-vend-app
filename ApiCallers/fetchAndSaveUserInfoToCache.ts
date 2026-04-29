@@ -1,9 +1,7 @@
+import { DEV_MODE } from "@/config";
 import { UserStorage } from "@/store/Storage";
 import { User } from "@/Types/User";
 import { callAPI } from "./callAPI";
-
-const DEVELOPMENT_MODE = true;
-
 
 export const fetchAndSaveUserInfoToCache = async (): Promise<void> => {
     const currentUser = await UserStorage.getUser();
@@ -12,7 +10,7 @@ export const fetchAndSaveUserInfoToCache = async (): Promise<void> => {
         throw new Error('No user found in storage. Cannot fetch user info without a valid user ID.');
     }
 
-    if (DEVELOPMENT_MODE) {
+    if (DEV_MODE) {
         console.log('Development mode: saving dummy user for fetchUserInfo');
         await UserStorage.saveUser(fakeUser as User);
         return;

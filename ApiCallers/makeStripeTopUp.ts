@@ -1,9 +1,8 @@
 // Creates a Stripe PaymentIntent on the backend and returns the client_secret
 // for the frontend to confirm the payment with the Stripe SDK.
 
+import { DEV_MODE } from "@/config";
 import { callAPI } from "./callAPI";
-
-const DEVELOPMENT_MODE = true;
 
 export type PaymentIntentResponse = {
     success: boolean;
@@ -19,7 +18,7 @@ export const makeStripeTopUp = async (amount: number, currency = 'GBP'): Promise
         return { success: false, error: 'Amount must be greater than zero.' };
     }
 
-    if (DEVELOPMENT_MODE) {
+    if (DEV_MODE) {
         console.log(`[DEV] Simulating PaymentIntent for £${amount.toFixed(2)}`);
         return new Promise((resolve) =>
             setTimeout(() => resolve({
