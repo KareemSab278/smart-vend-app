@@ -8,7 +8,7 @@ export default function PaymentScreenWeb() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Web payment is only supported on IOS and Android.</Text>
+      <Text style={styles.title}>Web payment is only supported on IOS and Android for now.</Text>
       <MainButton title="Back to account" onPress={() => router.replace('/account')} />
     </View>
   );

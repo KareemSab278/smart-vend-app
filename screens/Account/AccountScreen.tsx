@@ -6,7 +6,6 @@ import { savePin } from '@/ApiCallers/savePin';
 import { MainButton } from '@/components/Button';
 import { LoadingComponent } from '@/components/Loading';
 import AppModal from '@/components/Modal';
-import Progress from '@/components/ProgressBar';
 import { IfUserNotSignedIn } from '@/Security/signInCheck';
 import { UserStorage } from '@/store/Storage';
 import { User } from '@/Types/User';
@@ -14,6 +13,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Animated, Easing, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { DrinksLoyaltyCard } from './accountComponents/DrinksLoyaltyCard';
+import { PinReveal } from './accountComponents/PinReveal';
 import { SetCardNumModal } from './accountComponents/setCardNumModal';
 import { SetPinModal } from './accountComponents/SetPinModal';
 import { TopUpModal } from './accountComponents/TopUpModal';
@@ -96,8 +97,9 @@ export default function AccountScreen() {
     const loadData = async () => {
         setLoading(true);
         await Promise.all([
-            fetchAndSaveUserInfoToCache().then(() =>
-                UserStorage.getUser().then(u => setUser(u as User))),
+            fetchAndSaveUserInfoToCache()
+                .then(() => UserStorage.getUser()
+                    .then(u => setUser(u as User))),
         ]).catch(e => console.error('Error loading account data:', e));
         setLoading(false);
     };
@@ -150,7 +152,6 @@ export default function AccountScreen() {
 
     const hotCount = user?.hot_drinks_count ?? 0;
     const hasFree = user?.free_drinks ?? 0;
-    const progress = Math.min(hotCount / HOT_DRINKS_GOAL, 1);
     const hasPin = !!user?.market_card_pin;
 
     return (
@@ -158,37 +159,15 @@ export default function AccountScreen() {
 
             <IfUserNotSignedIn goTo="/sign-in" />
 
-            <AppModal
-                visible={loading}>
-                {<LoadingComponent />}
-            </AppModal>
+            <AppModal visible={loading}> <LoadingComponent /> </AppModal>
 
             {user?.market_card_pin && (
-                <AppModal
-                    title={loadingRevealPin ? 'Getting Your PIN...' : 'Keep Your PIN Safe'}
+                <PinReveal
+                    loading={loadingRevealPin}
                     visible={revealPinShown}
                     onClose={() => { setRevealPinShown(false); setRevealedPin(null); }}
-                    children={
-                        <>
-                            {loadingRevealPin ? (
-                                <LoadingComponent />
-                            ) : (
-                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                    {revealPinDigits.map((digit, index) => {
-                                        const animation = revealPinAnimations.current[index] ?? new Animated.Value(0);
-                                        return (
-                                            <Animated.Text
-                                                key={index}
-                                                style={[styles.pinDigit, { opacity: animation, transform: [{ translateX: animation.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }] }]}
-                                            >
-                                                {digit}
-                                            </Animated.Text>
-                                        );
-                                    })}
-                                </View>
-                            )}
-                        </>
-                    }
+                    revealPinDigits={revealPinDigits}
+                    revealPinAnimations={revealPinAnimations}
                 />
             )}
 
@@ -214,20 +193,18 @@ export default function AccountScreen() {
                         <Text style={styles.cardLabel}>Market Card</Text>
                         {hasPin && (
                             <TouchableOpacity style={styles.revealPinButton} onPress={handleRevealPin}>
-                                <Text style={styles.revealPin}>
-                                    Reveal PIN
-                                </Text>
+                                <Text style={styles.revealPin}> Reveal PIN </Text>
                                 <MaterialCommunityIcons name="eye-outline" size={22} color="#fff" />
                             </TouchableOpacity>
                         )}
                     </View>
-
-                    <Text style={styles.cardNumber}>{String(user?.market_card_number ?? '')}</Text>
-
-                    <Text style={styles.balanceLabel}>Current Balance</Text>
-                    <Text style={styles.balance}>
-                        £{(user?.market_card_balance ?? 0).toFixed(2)}
-                    </Text>
+                    <View>
+                        <Text style={styles.cardNumber}>{String(user?.market_card_number ?? '')}</Text>
+                        <Text style={styles.balanceLabel}>Current Balance</Text>
+                        <Text style={styles.balance}>
+                            £{(user?.market_card_balance ?? 0).toFixed(2)}
+                        </Text>
+                    </View>
                     <View style={styles.cardActions}>
 
                         <View style={styles.cardOption}><MainButton
@@ -248,30 +225,12 @@ export default function AccountScreen() {
                     </View>
                 </View>
 
-                <View style={styles.section}>
-                    <View style={styles.loyaltyCard}>
-                        <View style={styles.loyaltyRow}>
-                            <MaterialCommunityIcons name="coffee" size={24} color="#481186" />
-                            <Text style={styles.loyaltyCount}>
-                                {hotCount} / {HOT_DRINKS_GOAL}
-                            </Text>
-                        </View>
-                        <Text style={styles.loyaltyHint}>
-                            ({HOT_DRINKS_GOAL - hotCount} more to go)
-                        </Text>
-                        <Progress progress={progress} color="purple" />
-                    </View>
-
-                    {hasFree && (
-                        <View style={styles.freeDrinkBanner}>
-                            <MaterialCommunityIcons name="coffee" size={14} color="#023b00" />
-                            <Text style={styles.freeDrinkText}>
-                                You have {user?.free_drinks} free hot drink
-                                {user?.free_drinks && user?.free_drinks > 1 ? 's' : ''}!
-                            </Text>
-                        </View>
-                    )}
-                </View>
+                <DrinksLoyaltyCard
+                    current={hotCount}
+                    goal={HOT_DRINKS_GOAL}
+                    freeCount={hasFree ?? 0}
+                    user={user || {} as User}
+                />
 
             </ScrollView>
 

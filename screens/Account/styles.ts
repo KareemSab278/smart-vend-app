@@ -24,7 +24,9 @@ export const styles = StyleSheet.create({
     },
     cardOption: {
         maxWidth: '40%',
-        // maxHeight: 50,
+        alignContent: 'center',
+        margin: 'auto',
+        flex: 1,
     },
     pinDigit: {
         fontSize: 26,
@@ -59,7 +61,7 @@ export const styles = StyleSheet.create({
         gap: 5,
     },
     card: {
-        backgroundColor: '#481186e3',
+        backgroundColor: '#481186',
         borderRadius: 16,
         padding: 24,
         marginBottom: 24,
@@ -73,7 +75,6 @@ export const styles = StyleSheet.create({
         color: 'rgba(255,255,255,0.7)',
         letterSpacing: 1.5,
         textTransform: 'uppercase',
-        // marginBottom: 4,
     },
     cardNumber: {
         fontSize: 18,
@@ -141,6 +142,9 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '100%',
         marginTop: 12,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: 6,
     },
     freeDrinkText: {
         fontSize: 15,

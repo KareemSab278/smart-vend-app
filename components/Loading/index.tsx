@@ -7,7 +7,7 @@ const LoadingComponent = () => {
     return (
         <View style={styles.container}>
             <ActivityIndicator animating={true} color={MD2Colors.purple100} size={'large'} />
-            <Text style={styles.subtitle}>Loading</Text>
+            <Text style={styles.subtitle}>Loading...</Text>
         </View>
     );
 };
