@@ -36,6 +36,7 @@ export default function RootLayout() {
     <PaperProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <View style={{ flex: 1 }}>
+          <StatusBar style="dark" />
           <View style={{ flex: 1, marginTop: 30 }}>
             <Stack>
               {SCREENS.map((name) => (
