@@ -1,8 +1,7 @@
-
+import { DEV_MODE } from '@/config';
 import { UserStorage } from '@/store/Storage';
 import { callAPI } from "./callAPI";
 
-const DEVELOPMENT_MODE = true;
 
 type ExpectedResponse = {
     success: boolean;
@@ -10,9 +9,10 @@ type ExpectedResponse = {
     error?: string;
 };
 
+
 export const saveCardNumber = async (card_num: number, user_id: number): Promise<ExpectedResponse> => {
 
-    if (DEVELOPMENT_MODE) {
+    if (DEV_MODE()) {
         await saveUser(card_num);
         return { success: true, market_card_number: card_num };
     }
